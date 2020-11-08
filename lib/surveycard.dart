@@ -21,7 +21,7 @@ class _SurveyCardState extends State<SurveyCard> {
         ),
         child: Column(children: [
             ClipRRect(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(20)),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(20.0),
