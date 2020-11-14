@@ -7,7 +7,7 @@ import 'package:flutter_gradients/flutter_gradients.dart';
 
 class SurveyCard extends StatefulWidget {
 
-  SurveyCard({Key key, this.index}) : super(key: key){
+  SurveyCard({Key key, this.index, this.data}) : super(key: key){
     List<LinearGradient> gradients = [
       FlutterGradients.mindCrawl(),
       FlutterGradients.sweetPeriod(),
@@ -18,6 +18,9 @@ class SurveyCard extends StatefulWidget {
   }
 
   final index;
+
+  // Key-value of survey data. Schemaless.. oh boy
+  final Map data;
   LinearGradient gradient;
 
   @override
@@ -78,13 +81,13 @@ class _SurveyCardState extends State<SurveyCard> with SingleTickerProviderStateM
           child: Column(children: [
               GestureDetector(
                 onTap: () => tapCard(),
-                child: SurveyHero(gradient: widget.gradient)
+                child: SurveyHero(title: widget.data['title'], gradient: widget.gradient)
               ),
               
               Container(
                 padding: EdgeInsets.all(20.0),
                 alignment: Alignment.topLeft,
-                child:Text("Survey description, blah blah blah.."),
+                child:Text(widget.data['description']),
                 
               ),
               SizeTransition(
@@ -112,9 +115,10 @@ class _SurveyCardState extends State<SurveyCard> with SingleTickerProviderStateM
 
 class SurveyHero extends StatelessWidget {
 
-  const SurveyHero({Key key, this.gradient}) : super(key: key);
+  const SurveyHero({Key key, this.gradient, this.title}) : super(key: key);
 
   final LinearGradient gradient;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +130,7 @@ class SurveyHero extends StatelessWidget {
         gradient: gradient
       ),
       child: Text(
-        "Team Formation",
+        title,
         style: Theme.of(context).textTheme.headline2.merge(TextStyle(color: Colors.white)),
       )
     );

@@ -2,7 +2,9 @@ import 'package:catus/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:catus/surveylist.dart';
+import 'package:firebase_core/firebase_core.dart';
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
       statusBarColor: Colors.white.withOpacity(0.5),
@@ -13,6 +15,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+  // Firebase initialization future
+  final Future<FirebaseApp> _firebaseInitialization = Firebase.initializeApp();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -37,7 +43,23 @@ class MyApp extends StatelessWidget {
           headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
         ),
       ),
-      home: SwipeTabBar(),
+      home: FutureBuilder(
+        future: _firebaseInitialization,
+        builder: (context, snapshot) {
+          // Check for errors
+          if (snapshot.hasError) {
+            return Text("Error");
+          }
+
+          // Once complete, show your application
+          if (snapshot.connectionState == ConnectionState.done) {
+            return SwipeTabBar();
+          }
+
+          // Otherwise, show something whilst waiting for initialization to complete
+          return Text("Loading");
+        }
+      ),
     );
   }
 }

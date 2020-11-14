@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "987366465698",
+    "firebase_url": "https://catus-6b3e5.firebaseio.com",
+    "project_id": "catus-6b3e5",
+    "storage_bucket": "catus-6b3e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987366465698:android:d2fd3e724e94d26315f7fb",
+        "android_client_info": {
+          "package_name": "com.uiuc.catus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987366465698-f54km5l4f0usuvvf3hjpa3ud508kthbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkMw4iKrxomqmR1ER3JbJ324DcMzp5Hs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987366465698-f54km5l4f0usuvvf3hjpa3ud508kthbb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
