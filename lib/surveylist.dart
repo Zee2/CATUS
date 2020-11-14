@@ -21,19 +21,16 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     
-    return ListView(
+    return ListView.builder(
       
       physics: BouncingScrollPhysics(),
-      children: [
-        // A spacer.
-        Header(showText: true, showProfile: false, text: widget.title),
-        SurveyCard(),
-        SurveyCard(),
-        SurveyCard(),
-        SurveyCard(),
-        SurveyCard(),
-        SurveyCard(),
-      ],
+      itemCount: 7,
+      itemBuilder: (context, index) {
+        if(index == 0)
+          return Header(showText: true, showProfile: false, text: widget.title);
+        else
+          return SurveyCard(index: index - 1,);
+      }
     );
   }
 }

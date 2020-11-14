@@ -1,6 +1,7 @@
 import 'package:catus/header.dart';
 import 'package:catus/surveycard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TakeSurvey extends StatefulWidget {
 
@@ -63,7 +64,10 @@ class _SliderQuestionState extends State<SliderQuestion> {
               max: 5,
               divisions: 4,
               label: _currentSliderValue.round().toString(),
-              onChanged: (value) => setState(() => _currentSliderValue = value),
+              onChanged: (value) => setState(() {
+                _currentSliderValue = value;
+                HapticFeedback.selectionClick();
+              }),
             )
           )
         ],

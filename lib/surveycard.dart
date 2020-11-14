@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:catus/takeSurvey.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gradients/flutter_gradients.dart';
+
+
 
 class SurveyCard extends StatefulWidget {
+
+  SurveyCard({Key key, this.index}) : super(key: key){
+    List<LinearGradient> gradients = [
+      FlutterGradients.mindCrawl(),
+      FlutterGradients.sweetPeriod(),
+      FlutterGradients.plumBath(),
+      FlutterGradients.spaceShift(),
+    ];
+    gradient = gradients[index % gradients.length];
+  }
+
+  final index;
+  LinearGradient gradient;
 
   @override
   _SurveyCardState createState() => _SurveyCardState();
@@ -28,19 +44,23 @@ class _SurveyCardState extends State<SurveyCard> with SingleTickerProviderStateM
       parent: expandController,
       curve: Curves.easeInOut
     );
+
+    
+  }
+
+  void tapCard(){
+    setState(() {
+      isExpanded = !isExpanded;
+      if(isExpanded)
+        expandController.forward();
+      else
+        expandController.reverse();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: GestureDetector(
-        onTap: () => setState(() {
-          isExpanded = !isExpanded;
-          if(isExpanded)
-            expandController.forward();
-          else
-            expandController.reverse();
-        }),
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200),
           curve: Curves.easeInOut,
@@ -56,7 +76,11 @@ class _SurveyCardState extends State<SurveyCard> with SingleTickerProviderStateM
             boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
           ),
           child: Column(children: [
-              SurveyHero(),
+              GestureDetector(
+                onTap: () => tapCard(),
+                child: SurveyHero(gradient: widget.gradient)
+              ),
+              
               Container(
                 padding: EdgeInsets.all(20.0),
                 alignment: Alignment.topLeft,
@@ -81,20 +105,25 @@ class _SurveyCardState extends State<SurveyCard> with SingleTickerProviderStateM
                     
             ],)
           )
-      )
       
     );
   }
 }
 
 class SurveyHero extends StatelessWidget {
+
+  const SurveyHero({Key key, this.gradient}) : super(key: key);
+
+  final LinearGradient gradient;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage("assets/forest.jpg"), fit: BoxFit.cover)
+        //image: DecorationImage(image: AssetImage("assets/forest.jpg"), fit: BoxFit.cover)
+        gradient: gradient
       ),
       child: Text(
         "Team Formation",
