@@ -13,8 +13,10 @@ class SurveyList extends StatefulWidget {
   _SurveyListState createState() => _SurveyListState();
 }
 
-class _SurveyListState extends State<SurveyList> {
+class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMixin<SurveyList> {
 
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class _SurveyListState extends State<SurveyList> {
         SurveyCard(),
         SurveyCard(),
         SurveyCard(),
-        SurveyCard()
+        SurveyCard(),
       ],
     );
   }
