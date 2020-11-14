@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:catus/signin.dart';
+import 'package:catus/profile.dart';
 
 class Header extends StatelessWidget {
 
@@ -27,13 +28,15 @@ class Header extends StatelessWidget {
 }
 
 class ProfileButton extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       clipBehavior: Clip.antiAlias,
       onPressed: () => Navigator.push(
         context,
-        createPopup(SignIn())
+        FirebaseAuth.instance.currentUser == null ? createPopup(SignIn()) : MaterialPageRoute(
+          builder: (context) => ProfilePage())
         ),
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(10.0),
@@ -44,6 +47,7 @@ class ProfileButton extends StatelessWidget {
         enableFeedback: true,
       ),
       child: Image(
+        // Doesn't work correctly; needs to redraw/set state on auth state change
         image: FirebaseAuth.instance.currentUser == null ? AssetImage("assets/anonUser.png") : AssetImage("assets/person.png"),
         fit: BoxFit.cover,
         width: 55.0,

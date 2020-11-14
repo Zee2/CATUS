@@ -52,6 +52,29 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
 
         print("Found " + snapshot.data.docs.length.toString() + "documents");
 
+        if(snapshot.data.docs.length == 0) {
+          return ListView(
+            children: [
+              Header(showText: true, showProfile: false, text: widget.title),
+              Container(
+                margin: EdgeInsets.only(top: 100),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image(image: AssetImage("assets/empty.png"), width: 300.0,),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.0),
+                      child: Text("No surveys yet. Try making some!")
+                    )
+                    
+                  ],
+                )
+              )
+              
+            ]
+          );
+        }
+
         return ListView.builder(
           physics: BouncingScrollPhysics(),
           itemCount: snapshot.data.docs.length + 1,
