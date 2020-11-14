@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:catus/signin.dart';
 
 class Header extends StatelessWidget {
 
@@ -29,7 +31,10 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       clipBehavior: Clip.antiAlias,
-      onPressed: () => {print("hello")},
+      onPressed: () => Navigator.push(
+        context,
+        createPopup(SignIn())
+        ),
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(10.0),
         backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -39,7 +44,7 @@ class ProfileButton extends StatelessWidget {
         enableFeedback: true,
       ),
       child: Image(
-        image: AssetImage("assets/person.png"),
+        image: FirebaseAuth.instance.currentUser == null ? AssetImage("assets/anonUser.png") : AssetImage("assets/person.png"),
         fit: BoxFit.cover,
         width: 55.0,
         height: 55.0,
