@@ -10,8 +10,8 @@ class SurveyCard extends StatefulWidget {
   SurveyCard({Key key, this.index, this.data}) : super(key: key){
     List<LinearGradient> gradients = [
       FlutterGradients.mindCrawl(),
-      FlutterGradients.sweetPeriod(),
-      FlutterGradients.plumBath(),
+      FlutterGradients.solidStone(),
+      FlutterGradients.blackSea(),
       FlutterGradients.spaceShift(),
     ];
     gradient = gradients[index % gradients.length];

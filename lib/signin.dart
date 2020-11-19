@@ -21,7 +21,19 @@ Route createPopup(Widget page) {
   );
 }
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
+
+  @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+
+  String email = "", password = "";
+  final _formKey = GlobalKey<FormState>(); // Key for validating signup form
+
+  Future<UserCredential> userCred;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -29,14 +41,14 @@ class SignIn extends StatelessWidget {
       child: Material(
         color: Colors.white.withOpacity(0.5),
         child: Align(
-          alignment: Alignment(0.5, -0.3),
+          alignment: Alignment(0.0, -0.3),
           child: Stack(
             children: [
               // To ignore taps to go back
               GestureDetector(
                 onTap: () {}, // Do nothing
                 child: Container(
-                  constraints: BoxConstraints(minWidth: 600.0),
+                  constraints: BoxConstraints(minWidth: 500.0, maxWidth: 600.0),
                   margin: EdgeInsets.all(40.0),
                   padding: EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0, bottom: 50.0),
                   decoration: BoxDecoration(
@@ -44,30 +56,70 @@ class SignIn extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Login",
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      Text(
-                        "You need to login to do that."
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "Email",
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Sign up",
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                        Text(
+                          "Create a new account"
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Email",
+                          ),
+                          onChanged: (value) => email = value,
+                          validator: (value) {
+                            if(value.isEmpty)
+                              return "Please enter your email";
+                            else
+                              return null;
+                          }
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                          ),
+                          onChanged: (value) => password = value,
+                            
+                          validator: (value) {
+                            if(value.isEmpty)
+                              return "Please enter your password";
+                            else
+                              return null;
+                          }
+                        ),
+                        FutureBuilder(
+                          future: userCred,
+                          builder: (context, snapshot) {
+                            if(snapshot.hasError){
+                              return Center(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(7)),
+                                    border: Border.all(color: Colors.red)
+                                  ),
+                                  padding: EdgeInsets.all(5.0),
+                                  margin: EdgeInsets.only(top: 20),
+                                  child: Text(
+                                    snapshot.error,
+                                    style: TextStyle(color: Colors.red),
+                                  )
+                                )
+                              );
+                            }
+                            return Container();
+                          }
                         )
-                      ),
-                      TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                        )
-                      ),
-                    ],
+                      ],
+                    )
                   )
                 ),
               ),
@@ -140,14 +192,14 @@ class _SignUpState extends State<SignUp> {
       child: Material(
         color: Colors.white.withOpacity(0.5),
         child: Align(
-          alignment: Alignment(0.5, -0.3),
+           alignment: Alignment(0.0, -0.3),
           child: Stack(
             children: [
               // To ignore taps to go back
               GestureDetector(
                 onTap: () {}, // Do nothing
                 child: Container(
-                  constraints: BoxConstraints(minWidth: 600.0),
+                  constraints: BoxConstraints(minWidth: 500.0, maxWidth: 600.0),
                   margin: EdgeInsets.all(40.0),
                   padding: EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0, bottom: 50.0),
                   decoration: BoxDecoration(

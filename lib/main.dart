@@ -104,17 +104,25 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
           SafeArea(child: Header( showText: false, showProfile: true, text: "",)),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _activePage,
-            onTap: (index) {
-              _pageViewController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
-            },
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.send), label: "Outbox"),
-              BottomNavigationBarItem(icon: Icon(Icons.inbox), label: "Inbox"),
-              BottomNavigationBarItem(icon: Icon(Icons.stacked_line_chart), label: "Results"),
-            ],
-      )
+      floatingActionButton: FloatingActionButton(
+            onPressed: () => {},
+            child: Icon(Icons.add),
+          ),
+      bottomNavigationBar: BottomAppBar(
+        child: BottomNavigationBar(
+          elevation: 20.0,
+          currentIndex: _activePage,
+          onTap: (index) {
+            _pageViewController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
+          },
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.send), label: "Outbox"),
+            BottomNavigationBarItem(icon: Icon(Icons.inbox), label: "Inbox"),
+            BottomNavigationBarItem(icon: Icon(Icons.stacked_line_chart), label: "Results"),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
