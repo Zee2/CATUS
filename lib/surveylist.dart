@@ -40,13 +40,15 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
       stream: surveys,
       builder: (context, snapshot) {
 
-        print("Test!");
+        print("Streambuilder Test!");
 
         if (snapshot.hasError) {
+          print("Snapshot error: " + snapshot.error.toString());
           return ListView(children: [Header(showText: true, showProfile: false, text: widget.title)] );
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
+          print("Snapshot waiting");
           return ListView(children: [Header(showText: true, showProfile: false, text: widget.title)] );
         }
 
