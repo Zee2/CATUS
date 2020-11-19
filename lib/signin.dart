@@ -41,7 +41,7 @@ class _SignInState extends State<SignIn> {
       child: Material(
         color: Colors.white.withOpacity(0.5),
         child: Align(
-          alignment: Alignment(0.0, -0.3),
+          alignment: Alignment(0.0, -0.5),
           child: Stack(
             children: [
               // To ignore taps to go back
@@ -142,17 +142,28 @@ class _SignInState extends State<SignIn> {
                     Container(width: 20),
                     FloatingActionButton.extended(
                       heroTag: null,
-                      onPressed: () {
-                        Navigator.of(context).pop();
+                      onPressed: (){
+                        final formState = _formKey.currentState;
+                        if (formState.validate()) {
+                          formState.save();
+                          print("Signing user in, email = " + email);
+                         
+                          setState(() {
+                            userCred = signIn(email, password);
+                            userCred.then((userCred) {
+                              Navigator.of(context).popUntil((route) => route.isFirst);
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+                            });
+                          });
+                        }
                       },
-                      icon: Icon(Icons.person),
+                      backgroundColor: Colors.blue,
+                      icon: Icon(Icons.switch_account),
                       label: Text("Sign in")
                     ),
-                  
                   ]
                 )
               )
-              
             ]
           )
         )
@@ -192,7 +203,7 @@ class _SignUpState extends State<SignUp> {
       child: Material(
         color: Colors.white.withOpacity(0.5),
         child: Align(
-           alignment: Alignment(0.0, -0.3),
+           alignment: Alignment(0.0, -0.5),
           child: Stack(
             children: [
               // To ignore taps to go back
@@ -321,7 +332,7 @@ class _SignUpState extends State<SignUp> {
                           print("Creating user, email = " + email);
                          
                           setState(() {
-                            userCred = signIn(email, password);
+                            userCred = createUser(email, password);
                             userCred.then((userCred) {
                               Navigator.of(context).popUntil((route) => route.isFirst);
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
@@ -346,11 +357,32 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-Future<UserCredential> signIn(String email, String password) async {
+Future<UserCredential> createUser(String email, String password) async {
   String errorMessage;
   UserCredential result;
   try {
     result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+  } on FirebaseAuthException catch(e) {
+    print("Catching firebase auth exception");
+    errorMessage = getMessageFromErrorCode(e.code);
+    print("Error code parsed; " + errorMessage);
+  } catch(e) {
+    print("Catching generic exception");
+    print(e);
+  }
+
+  if (errorMessage != null) {
+    return Future.error(errorMessage);
+  }
+
+  return result;
+}
+
+Future<UserCredential> signIn(String email, String password) async {
+  String errorMessage;
+  UserCredential result;
+  try {
+    result = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
   } on FirebaseAuthException catch(e) {
     print("Catching firebase auth exception");
     errorMessage = getMessageFromErrorCode(e.code);

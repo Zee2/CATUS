@@ -25,7 +25,6 @@ class _TakeSurveyState extends State<TakeSurvey> {
           SliderQuestion(),
           SliderQuestion(),
           SliderQuestion(),
-          
         ],
       ),
     );
