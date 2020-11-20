@@ -64,11 +64,11 @@ class _SignInState extends State<SignIn> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Sign up",
+                          "Sign in",
                           style: Theme.of(context).textTheme.headline1,
                         ),
                         Text(
-                          "Create a new account"
+                          "You need to login to do that."
                         ),
                         TextFormField(
                           decoration: InputDecoration(
