@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:number_to_words/number_to_words.dart';
 import "stringextension.dart";
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:catus/groups.dart';
 
 
@@ -12,19 +13,15 @@ import 'package:catus/groups.dart';
 class SurveyCard extends StatefulWidget {
 
   SurveyCard({Key key, this.index, this.data}) : super(key: key){
-    List<LinearGradient> gradients = [
-      FlutterGradients.mindCrawl(),
-      FlutterGradients.solidStone(),
-      FlutterGradients.blackSea(),
-      FlutterGradients.spaceShift(),
-    ];
-    gradient = gradients[index % gradients.length];
   }
 
   final index;
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot data;
-  LinearGradient gradient;
+  final List<LinearGradient> gradients = [FlutterGradients.mindCrawl(),
+      FlutterGradients.solidStone(),
+      FlutterGradients.blackSea(),
+      FlutterGradients.spaceShift()];
 
   @override
   _SurveyCardState createState() => _SurveyCardState();
@@ -34,6 +31,8 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
 
   bool isExpanded = false;
   bool isSent = false;
+
+  LinearGradient gradient;
 
   AnimationController expandController;
   Animation<double> expandAnimation;
@@ -45,6 +44,10 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    gradient = widget.gradients[widget.index];
+
+    print("Initstate: " + widget.data.data()['title']);
     expandController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -91,7 +94,9 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
 
   sendCard(){
     isSent = true;
-    _sendController.forward();
+    _sendController.forward().then((value) => widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])}));
+    // _sendController.forward();
+    // Future.delayed(Duration(seconds: 5), () => widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])}));
     setState(() {});
   }
 
@@ -132,7 +137,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
             child: Column(children: [
                 GestureDetector(
                   onTap: () => tapCard(),
-                  child: SurveyHero(title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: widget.gradient)
+                  child: SurveyHero(title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: gradient)
                 ),
                 
                 Container(

@@ -39,7 +39,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
       Timer.periodic(Duration(seconds: 1), (timer) {
         if(answersDirty) {
           print("Autosaving");
-          widget.survey.reference.collection('responses').doc(FirebaseAuth.instance.currentUser.uid).set(answers);
+          widget.survey.reference.collection('responses').doc(FirebaseAuth.instance.currentUser.uid).set(answers, SetOptions(merge: true));
           answersDirty = false;
         }
         
@@ -160,7 +160,12 @@ class SliderQuestion extends StatefulWidget {
 
 class _SliderQuestionState extends State<SliderQuestion> {
 
-  double _currentSliderValue = 1;
+  double _currentSliderValue;
+
+  @override void initState(){
+    super.initState();
+    _currentSliderValue = double.parse(widget.initial);
+  }
 
   @override Widget build(BuildContext context) {
     return Container(

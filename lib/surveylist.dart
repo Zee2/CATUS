@@ -21,12 +21,13 @@ class SurveyList extends StatefulWidget {
   _SurveyListState createState() => _SurveyListState();
 }
 
-class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMixin<SurveyList> {
+// class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMixin<SurveyList> {
+class _SurveyListState extends State<SurveyList>{
 
   Stream<QuerySnapshot> surveys;
 
-  @override
-  bool get wantKeepAlive => true;
+  // @override
+  // bool get wantKeepAlive => true;
 
   @override
   void initState(){
@@ -45,7 +46,6 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     
 
     return StreamBuilder<QuerySnapshot>(
@@ -72,8 +72,10 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
         int counter = 0;
         for(DocumentSnapshot doc in snapshot.data.docs) {
           if(widget.filter == null || (widget.filter != null && widget.filter(doc))){
-            listElements.add(SurveyCard(data: doc, index: counter));
+            listElements.add(SurveyCard(key: UniqueKey(), data: doc, index: counter));
             counter++;
+          } else {
+            print("Filtering a doc");
           }
         }
 

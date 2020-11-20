@@ -18,7 +18,9 @@ class Inbox extends StatelessWidget {
       if(snapshot.hasData){
         User user = snapshot.data;
         if(user.isAnonymous == false) {
-          return SurveyList(title: "Inbox", onlyOurs: true);
+          return SurveyList(title: "Inbox", onlyOurs: true, filter: (DocumentSnapshot doc) {
+            return !doc.data()['completed'].contains(user.uid);
+          });
         } else {
           return Stack(
             children: [
@@ -28,12 +30,7 @@ class Inbox extends StatelessWidget {
           );
         }
       } else {
-        return Stack(
-            children: [
-              SafeArea(child: Header(showText: true, showProfile: false, text: "Inbox")),
-              Center(child: promptLogin(context))
-            ]
-          );
+        return Center(child: CircularProgressIndicator());
       }
     });
   }
