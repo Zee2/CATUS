@@ -39,7 +39,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
         return Container(
           child: Column(
             children: List.generate(snapshot.data.docs.length, (index) {
-              
+              return SurveyQuestion(question: snapshot.data.docs[index],);
               //return TextQuestion(prompt: snapshot.data.docs[index]['prompt'],);
             })
           )
@@ -54,21 +54,28 @@ class _TakeSurveyState extends State<TakeSurvey> {
 
 class SurveyQuestion extends StatelessWidget {
 
-  const SurveyQuestion({Key key, this.questionType, this.prompt}) : super(key: key);
+  const SurveyQuestion({Key key, this.question}) : super(key: key);
 
-  final String questionType;
-  final String prompt;
+  final DocumentSnapshot question;
 
   @override Widget build(BuildContext context) {
-    switch(questionType) {
+    switch(question['type']) {
       case 'rate': 
-        return SliderQuestion(prompt: snapshot.data.docs[index]['prompt']);
+        return SliderQuestion(prompt: question['prompt']);
+      case 'text': 
+        return TextQuestion(prompt: question['prompt']);
+      default:
+        return Container();
     }
   }
 }
 
 class SliderQuestion extends StatefulWidget {
   
+  const SliderQuestion({Key key, this.prompt}) : super(key: key);
+
+  final String prompt;
+
   @override
   _SliderQuestionState createState() => _SliderQuestionState();
 }
