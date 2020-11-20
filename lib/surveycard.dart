@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:catus/takeSurvey.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,7 @@ class SurveyCard extends StatefulWidget {
   final index;
 
   // Key-value of survey data. Schemaless.. oh boy
-  final Map data;
+  final QueryDocumentSnapshot data;
   LinearGradient gradient;
 
   @override
@@ -99,7 +100,7 @@ class _SurveyCardState extends State<SurveyCard> with SingleTickerProviderStateM
                 child:Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TakeSurvey()
+                    TakeSurvey(survey: widget.data)
                   ],
                 )
                 

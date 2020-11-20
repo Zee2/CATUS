@@ -84,7 +84,7 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
             if(index == 0)
               return Header(showText: true, showProfile: false, text: widget.title);
             else
-              return SurveyCard(data: snapshot.data.docs[index-1].data(), index: index - 1,);
+              return SurveyCard(data: snapshot.data.docs[index-1], index: index - 1,);
           }
         );
       }
