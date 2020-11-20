@@ -18,7 +18,7 @@ class Inbox extends StatelessWidget {
       if(snapshot.hasData){
         User user = snapshot.data;
         if(user.isAnonymous == false) {
-          return SurveyList(title: "Inbox");
+          return SurveyList(title: "Inbox", onlyOurs: true,);
         } else {
           return Stack(
             children: [

@@ -92,9 +92,9 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
             physics: BouncingScrollPhysics(),
             controller: _pageViewController,
             children: <Widget>[
-              SurveyList(title: "Outbox"),
+              SurveyList(title: "Outbox", onlyOurs: false,),
               Inbox(),
-              SurveyList(title: "Results"),
+              SurveyList(title: "Results", onlyOurs: false,),
             ],
             onPageChanged: (index) {
               setState(() {

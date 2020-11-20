@@ -4,13 +4,14 @@ import 'package:catus/header.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SurveyList extends StatefulWidget {
 
-  SurveyList({Key key, this.title}) : super(key: key);
+  SurveyList({Key key, this.title, this.onlyOurs}) : super(key: key);
 
   final String title;
-  
+  final bool onlyOurs;
 
   @override
   _SurveyListState createState() => _SurveyListState();
@@ -26,10 +27,14 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
   @override
   void initState(){
     super.initState();
-    surveys = FirebaseFirestore.instance.collection("surveys").snapshots();
-  }
 
-  
+    if(widget.onlyOurs) {
+      var user = FirebaseAuth.instance.currentUser;
+      surveys = FirebaseFirestore.instance.collection("surveys").where('recipients', arrayContains: user.uid).snapshots();
+    } else {
+      surveys = FirebaseFirestore.instance.collection("surveys").snapshots();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +88,10 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
           itemBuilder: (context, index) {
             if(index == 0)
               return Header(showText: true, showProfile: false, text: widget.title);
-            else
+            else {
               return SurveyCard(data: snapshot.data.docs[index-1], index: index - 1,);
+            }
+            
           }
         );
       }
