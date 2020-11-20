@@ -2,6 +2,7 @@ import 'package:catus/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:catus/surveylist.dart';
+import 'package:catus/inbox.dart';
 import 'package:firebase_core/firebase_core.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,7 +93,7 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
             controller: _pageViewController,
             children: <Widget>[
               SurveyList(title: "Outbox"),
-              SurveyList(title: "Inbox"),
+              Inbox(),
               SurveyList(title: "Results"),
             ],
             onPageChanged: (index) {

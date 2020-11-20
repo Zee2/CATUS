@@ -20,7 +20,6 @@ class Header extends StatelessWidget {
         children: [
           if(showText) Text(text, style: Theme.of(context).textTheme.headline1),
           if(showProfile) ProfileButton()
-          
         ]
       )
     );
@@ -35,7 +34,7 @@ class ProfileButton extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       onPressed: () => Navigator.push(
         context,
-        FirebaseAuth.instance.currentUser == null ? createPopup(SignIn()) : MaterialPageRoute(
+        FirebaseAuth.instance.currentUser == null ? createPopup(SignIn(goToProfile: true,)) : MaterialPageRoute(
           builder: (context) => ProfilePage())
         ),
       style: ButtonStyle(

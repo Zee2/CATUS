@@ -23,6 +23,9 @@ Route createPopup(Widget page) {
 
 class SignIn extends StatefulWidget {
 
+  const SignIn({Key key, this.goToProfile}) : super(key: key);
+
+  final bool goToProfile;
   @override
   _SignInState createState() => _SignInState();
 }
@@ -133,7 +136,7 @@ class _SignInState extends State<SignIn> {
                     FloatingActionButton.extended(
                       heroTag: null,
                       onPressed: () {
-                        Navigator.of(context).push(createPopup(SignUp()));
+                        Navigator.of(context).push(createPopup(SignUp(goToProfile: widget.goToProfile,)));
                       },
                       backgroundColor: Colors.green,
                       icon: Icon(Icons.star_border),
@@ -152,7 +155,9 @@ class _SignInState extends State<SignIn> {
                             userCred = signIn(email, password);
                             userCred.then((userCred) {
                               Navigator.of(context).popUntil((route) => route.isFirst);
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+                              if(widget.goToProfile) {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+                              }
                             });
                           });
                         }
@@ -173,6 +178,10 @@ class _SignInState extends State<SignIn> {
 }
 
 class SignUp extends StatefulWidget {
+
+  const SignUp({Key key, this.goToProfile}) : super(key: key);
+
+  final bool goToProfile;
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -335,7 +344,9 @@ class _SignUpState extends State<SignUp> {
                             userCred = createUser(email, password);
                             userCred.then((userCred) {
                               Navigator.of(context).popUntil((route) => route.isFirst);
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+                              if(widget.goToProfile) {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+                              }
                             });
                           });
                         }
