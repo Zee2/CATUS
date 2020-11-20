@@ -129,7 +129,7 @@ class _SliderQuestionState extends State<SliderQuestion> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("This is a question that is answered by a 1-5 slider. This will eventually be pulled from a Firebase NoSQL database."),
+          Text(widget.prompt),
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
             child: Slider(

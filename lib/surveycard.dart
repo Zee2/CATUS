@@ -5,13 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:number_to_words/number_to_words.dart';
 import "stringextension.dart";
-
+import 'package:catus/groups.dart';
 
 
 
 class SurveyCard extends StatefulWidget {
 
-  SurveyCard({Key key, this.index, this.data}) : super(key: key){
+  SurveyCard({Key key, this.index, this.data, this.isLast}) : super(key: key){
     List<LinearGradient> gradients = [
       FlutterGradients.mindCrawl(),
       FlutterGradients.solidStone(),
@@ -22,7 +22,7 @@ class SurveyCard extends StatefulWidget {
   }
 
   final index;
-
+  final bool isLast;
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot data;
   LinearGradient gradient;
@@ -110,13 +110,11 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
         position: _sendAnimation,
         child: AnimatedBuilder(
           animation: _sendShrinkAnimation,
-          builder: (_, child) => ClipRect(
-            child: Align(
+          builder: (_, child) => Align(
               alignment: Alignment.center,
               heightFactor: _sendShrinkAnimation.value,
               widthFactor: null,
               child: child,
-            ),
           ),
           child: AnimatedContainer(
             duration: Duration(milliseconds: 500),
@@ -124,7 +122,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
             margin:
               isExpanded ?
                 EdgeInsets.only(bottom: 10.0, top: 10.0, left: 0.0, right: 0.0) 
-                  : EdgeInsets.only(bottom: 10.0, top: 10.0, left: 20.0, right: 20.0),
+                  : EdgeInsets.only(bottom: widget.isLast ? 40.0 : 10.0, top: 10.0, left: 20.0, right: 20.0),
             constraints: BoxConstraints(maxWidth: 800.0),
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
@@ -135,16 +133,16 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
             child: Column(children: [
                 GestureDetector(
                   onTap: () => tapCard(),
-                  child: SurveyHero(title: widget.data['title'], gradient: widget.gradient)
+                  child: SurveyHero(title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: widget.gradient)
                 ),
                 
                 Container(
-                  padding: EdgeInsets.only(left: 20.0, top: 15.0, right: 20.0),
+                  padding: EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
                   alignment: Alignment.topLeft,
                   child:Text(widget.data['description']),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+                  padding: EdgeInsets.only(left: 20.0, top: 15.0, right: 20.0),
                   alignment: Alignment.topLeft,
                   child: Row(
                     children: [
@@ -163,7 +161,6 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
                       Container(width: 10),
                       Text((widget.data['questionCount'] * 0.1).toString() + " minutes", style: TextStyle(color: Colors.grey))
                     ]
-                    
                   )
                 ),
                 SizeTransition(
@@ -194,10 +191,11 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
 
 class SurveyHero extends StatelessWidget {
 
-  const SurveyHero({Key key, this.gradient, this.title}) : super(key: key);
+  const SurveyHero({Key key, this.gradient, this.title, this.groups}) : super(key: key);
 
   final LinearGradient gradient;
   final String title;
+  final List<String> groups;
 
   @override
   Widget build(BuildContext context) {
@@ -208,9 +206,17 @@ class SurveyHero extends StatelessWidget {
         //image: DecorationImage(image: AssetImage("assets/forest.jpg"), fit: BoxFit.cover)
         gradient: gradient
       ),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.headline2.merge(TextStyle(color: Colors.white)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headline2.merge(TextStyle(color: Colors.white)),
+          ),
+          Container(height: 12),
+          Tags(groups),
+        ]
       )
     );
   }

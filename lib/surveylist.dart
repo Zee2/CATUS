@@ -83,14 +83,20 @@ class _SurveyListState extends State<SurveyList> with AutomaticKeepAliveClientMi
         }
 
         return ListView.builder(
-          
           physics: BouncingScrollPhysics(),
           itemCount: snapshot.data.docs.length + 1,
           itemBuilder: (context, index) {
             if(index == 0)
               return Header(showText: true, showProfile: false, text: widget.title);
             else {
-              return SurveyCard(data: snapshot.data.docs[index-1], index: index - 1,);
+              var doc = snapshot.data.docs[index-1];
+              if((widget.onlyOurs && doc['groups'].cast<String>().contains('CS465')) || !widget.onlyOurs){
+                return SurveyCard(data: snapshot.data.docs[index-1], index: index - 1, isLast: index == snapshot.data.docs.length);
+                
+              } else {
+                return Container();
+              }
+                
             }
             
           }
