@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Inter',
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           // Check for errors
           if (snapshot.hasError) {
-            return Text("Error");
+            return Container(child: Center(child: CircularProgressIndicator()), color: Colors.white);
           }
 
           // Once complete, show your application
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
           }
 
           // Otherwise, show something whilst waiting for initialization to complete
-          return Text("Loading");
+          return Container(child: Center(child: CircularProgressIndicator()), color: Colors.white);
         }
       ),
     );

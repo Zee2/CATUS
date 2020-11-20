@@ -41,9 +41,9 @@ class _TakeSurveyState extends State<TakeSurvey> {
           return Text("Loading...");
         }
         print("Found " + snapshot.data.docs.length.toString() + "questions");
+
         return Container(
           child: Column(
-            
             children: List<Widget>.generate(snapshot.data.docs.length, (index) {
               return SurveyQuestion(question: snapshot.data.docs[index],);
               //return TextQuestion(prompt: snapshot.data.docs[index]['prompt'],);

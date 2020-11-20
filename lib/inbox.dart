@@ -43,7 +43,7 @@ class Inbox extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          child: Image(image: AssetImage("assets/empty.png")),
+          child: Image(image: AssetImage("assets/empty.png"), width: 300),
           padding: EdgeInsets.all(50.0)
         ),
         Padding(

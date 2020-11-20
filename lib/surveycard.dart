@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:catus/takeSurvey.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
+import 'package:number_to_words/number_to_words.dart';
+import "stringextension.dart";
+
 
 
 
@@ -136,16 +139,38 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
                 ),
                 
                 Container(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.only(left: 20.0, top: 15.0, right: 20.0),
                   alignment: Alignment.topLeft,
                   child:Text(widget.data['description']),
-                  
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    children: [
+                      Icon(Icons.thumbs_up_down_outlined, size: 20.0, color: Colors.grey,),
+                      Container(width: 10),
+                      Text(widget.data['questionCount'].toString() + " questions", style: TextStyle(color: Colors.grey))
+                    ]
+                  )
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 20.0, bottom: 20.0, top: 5.0, right: 20.0),
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    children: [
+                      Icon(Icons.access_time_outlined, size: 20.0, color: Colors.grey,),
+                      Container(width: 10),
+                      Text((widget.data['questionCount'] * 0.1).toString() + " minutes", style: TextStyle(color: Colors.grey))
+                    ]
+                    
+                  )
                 ),
                 SizeTransition(
                   axis: Axis.vertical,
                   sizeFactor: expandAnimation,
                   child: Container(
-                    padding: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
                     alignment: Alignment.topLeft,
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
