@@ -15,22 +15,18 @@ class Inbox extends StatelessWidget {
     return StreamBuilder<User>(
     stream: FirebaseAuth.instance.authStateChanges(),
     builder: (context, snapshot) {
-      if(snapshot.hasData){
+      if(snapshot.data != null && snapshot.data.isAnonymous == false){
         User user = snapshot.data;
-        if(user.isAnonymous == false) {
-          return SurveyList(title: "Inbox", onlyOurs: true, filter: (DocumentSnapshot doc) {
+        return SurveyList(title: "Inbox", onlyOurs: true, filter: (DocumentSnapshot doc) {
             return !doc.data()['completed'].contains(user.uid);
           });
-        } else {
-          return Stack(
+      } else {
+        return Stack(
             children: [
               SafeArea(child: Header(showText: true, showProfile: false, text: "Inbox")),
               Center(child: promptLogin(context))
             ]
           );
-        }
-      } else {
-        return Center(child: CircularProgressIndicator());
       }
     });
   }

@@ -26,31 +26,44 @@ class Header extends StatelessWidget {
   }
 }
 
-class ProfileButton extends StatelessWidget {
+class ProfileButton extends StatefulWidget {
+
+  @override _ProfileButtonState createState() => _ProfileButtonState();
+}
+
+class _ProfileButtonState extends State<ProfileButton>{
+
+  @override
+  void initState(){
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((event) { setState((){}); });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      clipBehavior: Clip.antiAlias,
-      onPressed: () => Navigator.push(
-        context,
-        FirebaseAuth.instance.currentUser == null ? createPopup(SignIn(goToProfile: true,)) : MaterialPageRoute(
-          builder: (context) => ProfilePage())
+    return Hero(
+      tag: "profileButton",
+      child: ElevatedButton(
+        clipBehavior: Clip.antiAlias,
+        onPressed: () => Navigator.push(
+          context,
+          FirebaseAuth.instance.currentUser == null ? createPopup(SignIn(goToProfile: true,)) : MaterialPageRoute(
+            builder: (context) => ProfilePage())
+          ),
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(10.0),
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+          shape: MaterialStateProperty.all(CircleBorder()),
+          padding: MaterialStateProperty.all(EdgeInsets.zero),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          enableFeedback: true,
         ),
-      style: ButtonStyle(
-        elevation: MaterialStateProperty.all(10.0),
-        backgroundColor: MaterialStateProperty.all(Colors.white),
-        shape: MaterialStateProperty.all(CircleBorder()),
-        padding: MaterialStateProperty.all(EdgeInsets.zero),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        enableFeedback: true,
-      ),
-      child: Image(
-        // Doesn't work correctly; needs to redraw/set state on auth state change
-        image: FirebaseAuth.instance.currentUser == null ? AssetImage("assets/anonUser.png") : AssetImage("assets/person.png"),
-        fit: BoxFit.cover,
-        width: 55.0,
-        height: 55.0,
+        child: Image(
+              image: FirebaseAuth.instance.currentUser == null ? AssetImage("assets/anonUser.png") : AssetImage("assets/person.png"),
+              fit: BoxFit.cover,
+              width: 55.0,
+              height: 55.0,
+            )
       )
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:catus/surveycard.dart';
 import 'package:flutter/material.dart';
 import 'package:catus/header.dart';
@@ -72,7 +70,7 @@ class _SurveyListState extends State<SurveyList>{
         int counter = 0;
         for(DocumentSnapshot doc in snapshot.data.docs) {
           if(widget.filter == null || (widget.filter != null && widget.filter(doc))){
-            listElements.add(SurveyCard(key: UniqueKey(), data: doc, index: counter));
+            listElements.add(SurveyCard(key: UniqueKey(), data: doc));
             counter++;
           } else {
             print("Filtering a doc");

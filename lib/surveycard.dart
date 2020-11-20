@@ -12,10 +12,8 @@ import 'package:catus/groups.dart';
 
 class SurveyCard extends StatefulWidget {
 
-  SurveyCard({Key key, this.index, this.data}) : super(key: key){
+  SurveyCard({Key key, this.data}) : super(key: key){
   }
-
-  final index;
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot data;
   final List<LinearGradient> gradients = [FlutterGradients.mindCrawl(),
@@ -45,7 +43,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    gradient = widget.gradients[widget.index];
+    gradient = widget.gradients[widget.data['title'].hashCode % widget.gradients.length];
 
     print("Initstate: " + widget.data.data()['title']);
     expandController = AnimationController(
