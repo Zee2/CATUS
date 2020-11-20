@@ -7,9 +7,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TakeSurvey extends StatefulWidget {
 
-  const TakeSurvey({Key key, this.index, this.survey}) : super(key: key);
+  const TakeSurvey({Key key, this.index, this.survey, this.submitCallback}) : super(key: key);
 
   final String index;
+  final Function submitCallback;
 
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot survey;
@@ -42,10 +43,38 @@ class _TakeSurveyState extends State<TakeSurvey> {
         print("Found " + snapshot.data.docs.length.toString() + "questions");
         return Container(
           child: Column(
-            children: List.generate(snapshot.data.docs.length, (index) {
+            
+            children: List<Widget>.generate(snapshot.data.docs.length, (index) {
               return SurveyQuestion(question: snapshot.data.docs[index],);
               //return TextQuestion(prompt: snapshot.data.docs[index]['prompt'],);
-            })
+            }) + [
+              Container(
+                padding: EdgeInsets.only(top: 20.0),
+                child: RaisedButton(
+                  elevation: 10,
+                  child:  Container(
+                    height: 50.0,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                            Text('Submit', style: Theme.of(context).textTheme.button.copyWith(color: Colors.white)),
+                            Container(width: 10.0,),
+                            Icon(Icons.send, color: Colors.white,),
+                    ]
+                    )
+                  ),
+                  color: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100.0),
+                            ),
+                  onPressed: () {
+                    widget.submitCallback();
+                  },
+
+                )
+              )
+            ]
           )
         );
       }
