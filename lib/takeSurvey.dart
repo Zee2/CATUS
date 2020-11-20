@@ -80,8 +80,12 @@ class _TakeSurveyState extends State<TakeSurvey> {
                   child: Column(
                     children: List<Widget>.generate(snapshot.data.docs.length, (index) {
                       var question = snapshot.data.docs[index];
-
-                      return SurveyQuestion(question: question, updateCallback: processAnswer, initial: downloadedResponses.data.data()[question.id]);
+                      if(downloadedResponses.data.data() == null){
+                        return SurveyQuestion(question: question, updateCallback: processAnswer, initial: null);
+                      } else {
+                        
+                        return SurveyQuestion(question: question, updateCallback: processAnswer, initial: downloadedResponses.data?.data()[question.id]);
+                      }
                       //return TextQuestion(prompt: snapshot.data.docs[index]['prompt'],);
                     }) + [
                       Container(
@@ -164,7 +168,7 @@ class _SliderQuestionState extends State<SliderQuestion> {
 
   @override void initState(){
     super.initState();
-    _currentSliderValue = double.parse(widget.initial);
+    _currentSliderValue = double.parse(widget.initial ?? "1");
   }
 
   @override Widget build(BuildContext context) {
