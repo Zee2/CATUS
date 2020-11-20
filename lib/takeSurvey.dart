@@ -26,7 +26,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
   @override
   void initState(){
     super.initState();
-    questions = widget.survey.reference.collection('questions').snapshots();
+    questions = widget.survey.reference.collection('questions').orderBy('ordering').snapshots(includeMetadataChanges: true);
   }
 
   @override
@@ -35,6 +35,10 @@ class _TakeSurveyState extends State<TakeSurvey> {
     return StreamBuilder<QuerySnapshot>(
       stream: questions,
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          print("Snapshot waiting");
+          return Text("Loading...");
+        }
         print("Found " + snapshot.data.docs.length.toString() + "questions");
         return Container(
           child: Column(
