@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:catus/surveylist.dart';
 import 'package:catus/inbox.dart';
+import 'package:catus/outbox.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -73,9 +77,11 @@ class SwipeTabBar extends StatefulWidget {
 
 class _SwipeTabBarState extends State<SwipeTabBar> {
 
-  final _pageViewController = PageController();
+  final _pageViewController = PageController(
+    initialPage: 1
+  );
 
-  int _activePage = 0;
+  int _activePage = 1;
 
   @override
   void dispose() {
@@ -90,10 +96,11 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
         children: [
           
           PageView(
+            
             physics: BouncingScrollPhysics(),
             controller: _pageViewController,
             children: <Widget>[
-              SurveyList(title: "Outbox", onlyOurs: false,),
+              Outbox(),
               Inbox(),
               SurveyList(title: "Results", onlyOurs: false,),
             ],

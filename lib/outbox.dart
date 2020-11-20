@@ -7,7 +7,7 @@ import 'package:catus/signin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Inbox extends StatelessWidget {
+class Outbox extends StatelessWidget {
   
 
   @override
@@ -18,7 +18,7 @@ class Inbox extends StatelessWidget {
       if(snapshot.hasData){
         User user = snapshot.data;
         if(user.isAnonymous == false) {
-          return SurveyList(title: "Inbox", onlyOurs: true);
+          return SurveyList(title: "Outbox", onlyOurs: false, authorMode: true);
         } else {
           return Stack(
             children: [
@@ -48,7 +48,7 @@ class Inbox extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(bottom: 20.0),
-          child: Text("You'll need an account to recieve surveys."),
+          child: Text("You'll need an account to send surveys to your friends."),
         ),
         FloatingActionButton.extended(
           heroTag: null,

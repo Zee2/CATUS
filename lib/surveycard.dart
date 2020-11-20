@@ -11,7 +11,7 @@ import 'package:catus/groups.dart';
 
 class SurveyCard extends StatefulWidget {
 
-  SurveyCard({Key key, this.index, this.data, this.isLast}) : super(key: key){
+  SurveyCard({Key key, this.index, this.data}) : super(key: key){
     List<LinearGradient> gradients = [
       FlutterGradients.mindCrawl(),
       FlutterGradients.solidStone(),
@@ -22,7 +22,6 @@ class SurveyCard extends StatefulWidget {
   }
 
   final index;
-  final bool isLast;
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot data;
   LinearGradient gradient;
@@ -122,7 +121,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
             margin:
               isExpanded ?
                 EdgeInsets.only(bottom: 10.0, top: 10.0, left: 0.0, right: 0.0) 
-                  : EdgeInsets.only(bottom: widget.isLast ? 40.0 : 10.0, top: 10.0, left: 20.0, right: 20.0),
+                  : EdgeInsets.only(bottom: 10.0, top: 10.0, left: 20.0, right: 20.0),
             constraints: BoxConstraints(maxWidth: 800.0),
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(  

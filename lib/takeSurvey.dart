@@ -130,7 +130,7 @@ class SurveyQuestion extends StatelessWidget {
   SurveyQuestion({Key key, this.question, this.updateCallback, this.initial}) : super(key: key);
 
   final DocumentSnapshot question;
-  Function(String,String) updateCallback;
+  final Function(String,String) updateCallback;
   final String initial;
 
   @override Widget build(BuildContext context) {
@@ -152,7 +152,7 @@ class SliderQuestion extends StatefulWidget {
   final String prompt;
   final String id;
   final String initial;
-  Function(String,String) updateCallback;
+  final Function(String,String) updateCallback;
 
   @override
   _SliderQuestionState createState() => _SliderQuestionState();
@@ -203,7 +203,7 @@ class TextQuestion extends StatefulWidget {
   final String prompt;
   final String id;
   final String initial;
-  Function(String,String) updateCallback;
+  final Function(String,String) updateCallback;
 
   @override
   _TextQuestionState createState() => _TextQuestionState();
