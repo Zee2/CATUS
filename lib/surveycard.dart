@@ -61,7 +61,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
     );
 
     _sendAnimation = Tween<Offset>(
-      begin: Offset.zero,
+      begin: const Offset(0.0,0.0),
       end: const Offset(1.5,0.0)
     ).animate(CurvedAnimation(
       parent: _sendController,
@@ -105,9 +105,16 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
     return Center(
       child: SlideTransition(
         position: _sendAnimation,
-        child: SizeTransition(
-           axis: Axis.vertical,
-           sizeFactor: _sendShrinkAnimation,
+        child: AnimatedBuilder(
+          animation: _sendShrinkAnimation,
+          builder: (_, child) => ClipRect(
+            child: Align(
+              alignment: Alignment.center,
+              heightFactor: _sendShrinkAnimation.value,
+              widthFactor: null,
+              child: child,
+            ),
+          ),
           child: AnimatedContainer(
             duration: Duration(milliseconds: 500),
             curve: Curves.easeInOut,
@@ -155,7 +162,6 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
               ],)
             )
         )
-        
       )
     );
   }
