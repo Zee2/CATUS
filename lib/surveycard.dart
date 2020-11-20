@@ -125,7 +125,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
                   : EdgeInsets.only(bottom: widget.isLast ? 40.0 : 10.0, top: 10.0, left: 20.0, right: 20.0),
             constraints: BoxConstraints(maxWidth: 800.0),
             clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
+            decoration: BoxDecoration(  
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(15)),
               boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
