@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:catus/surveylist.dart';
 import 'package:catus/inbox.dart';
 import 'package:catus/outbox.dart';
+import 'package:catus/quickTeamFormation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -115,7 +116,12 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-            onPressed: () => {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => QuickTeamFormation()),
+              );
+            },
             child: Icon(Icons.add),
           ),
       bottomNavigationBar: BottomAppBar(
