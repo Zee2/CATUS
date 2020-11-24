@@ -5,6 +5,7 @@ import 'package:catus/surveylist.dart';
 import 'package:catus/inbox.dart';
 import 'package:catus/outbox.dart';
 import 'package:catus/quickTeamFormation.dart';
+import 'package:catus/homefab.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -115,15 +116,63 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
           SafeArea(child: Header( showText: false, showProfile: true, text: "",)),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => QuickTeamFormation()),
-              );
-            },
-            child: Icon(Icons.add),
-          ),
+      floatingActionButton: HomeFAB(
+        children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Quick Team Formation"),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => QuickTeamFormation()),
+                    );
+                  },
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.blue,
+                  mini: true,
+                  heroTag: null,
+                  child: Icon(Icons.edit),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0)
+                )
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Create Survey"),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    print("Todo: create survey page if logged in, otherwise log in");
+                    /*
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateSurvey()),
+                    );
+                    */
+                  },
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.blue,
+                  mini: true,
+                  heroTag: null,
+                  child: Icon(Icons.email),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0)
+                )
+              ],
+            )
+        ]
+      ),
       bottomNavigationBar: BottomAppBar(
         child: BottomNavigationBar(
           elevation: 20.0,
