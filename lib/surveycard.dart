@@ -7,6 +7,8 @@ import 'package:number_to_words/number_to_words.dart';
 import "stringextension.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:catus/groups.dart';
+import 'package:catus/signin.dart';
+import 'package:catus/editSurveyModal.dart';
 
 
 
@@ -137,11 +139,24 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
                   onTap: () => tapCard(),
                   child: SurveyHero(title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: gradient)
                 ),
-                
-                Container(
-                  padding: EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
-                  alignment: Alignment.topLeft,
-                  child:Text(widget.data['description']),
+                GestureDetector(
+                  onTap: () {
+                    // if outbox and open: edit survey, otherwise tap card
+                    if (widget.data['draft'] && isExpanded) {
+                      Navigator.push(context, createPopup(EditSurveyModal(
+                        description: widget.data['description'],
+                        name: widget.data['title'],
+                        callbackSet: (description, name) {
+                          widget.data.reference.update({"description": description, "title": name});
+                        }
+                      )));
+                    } else tapCard();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
+                    alignment: Alignment.topLeft,
+                    child:Text(widget.data['description']),
+                  )
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 20.0, top: 15.0, right: 20.0),

@@ -1,9 +1,10 @@
 import 'package:catus/header.dart';
-import 'package:catus/surveycard.dart';
+import 'package:catus/editQuestionModal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
+import 'package:catus/signin.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -16,7 +17,6 @@ class TakeSurvey extends StatefulWidget {
 
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot survey;
-
 
   @override
   _TakeSurveyState createState() => _TakeSurveyState();
@@ -56,6 +56,11 @@ class _TakeSurveyState extends State<TakeSurvey> {
     answersDirty = true;
   }
 
+  void processEdit(String questionID, String answer){
+    answers[questionID] = answer;
+    answersDirty = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -80,14 +85,44 @@ class _TakeSurveyState extends State<TakeSurvey> {
                   child: Column(
                     children: List<Widget>.generate(snapshot.data.docs.length, (index) {
                       var question = snapshot.data.docs[index];
-                      if(downloadedResponses.data.data() == null){
-                        return SurveyQuestion(question: question, updateCallback: processAnswer, initial: null);
+                      if (widget.survey.data()['draft']) {
+                        return SurveyQuestion(question: question, updateCallback: processEdit, draft: true);
                       } else {
-                        
-                        return SurveyQuestion(question: question, updateCallback: processAnswer, initial: downloadedResponses.data?.data()[question.id]);
+                        if(downloadedResponses.data.data() == null){
+                          return SurveyQuestion(question: question, updateCallback: processAnswer, initial: null);
+                        } else {
+                          return SurveyQuestion(question: question, updateCallback: processAnswer, initial: downloadedResponses.data?.data()[question.id]);
+                        }
                       }
                       //return TextQuestion(prompt: snapshot.data.docs[index]['prompt'],);
-                    }) + [
+                    }) + (widget.survey.data()['draft'] as bool == true ? [
+                      // add question button
+                      RaisedButton(
+                        elevation: 10,
+                        child: Container(
+                          height: 50.0,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text('Add Question', style: Theme.of(context).textTheme.button.copyWith(color: Colors.white)),
+                            ]
+                          )
+                        ),
+                        color: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  ),
+                        onPressed: () {
+                          widget.survey.reference.update({'questionCount': snapshot.data.docs.length + 1});
+                          widget.survey.reference.collection('questions').add({
+                            'ordering': snapshot.data.docs.length + 1, // shush, lol
+                            'type': 'text',
+                            'prompt': 'Untitled Question'
+                          });
+                        },
+                      )
+                    ] : []) + [
                       Container(
                         padding: EdgeInsets.only(top: 20.0),
                         child: RaisedButton(
@@ -131,21 +166,38 @@ class _TakeSurveyState extends State<TakeSurvey> {
 
 class SurveyQuestion extends StatelessWidget {
 
-  SurveyQuestion({Key key, this.question, this.updateCallback, this.initial}) : super(key: key);
+  SurveyQuestion({Key key, this.question, this.updateCallback, this.draft = false, this.initial}) : super(key: key);
 
   final DocumentSnapshot question;
   final Function(String,String) updateCallback;
   final String initial;
+  final bool draft;
 
   @override Widget build(BuildContext context) {
+    Widget draw;
     switch(question['type']) {
       case 'rate': 
-        return SliderQuestion(id: question.reference.id, prompt: question['prompt'], updateCallback: updateCallback, initial: initial);
+        draw = SliderQuestion(id: question.reference.id, prompt: question['prompt'], updateCallback: updateCallback, initial: initial);
+        break;
       case 'text': 
-        return TextQuestion(id: question.reference.id, prompt: question['prompt'], updateCallback: updateCallback,  initial: initial);
+        draw = TextQuestion(id: question.reference.id, prompt: question['prompt'], updateCallback: updateCallback,  initial: initial);
+        break;
       default:
-        return Container();
+        draw = Container();
+        break;
     }
+    if (!draft) return draw;
+    // in draft mode, tapping the widget pops up the edit description modal instead
+    return GestureDetector(
+      child: draw,
+      onTap: () => Navigator.push(context, createPopup(EditQuestionModal(
+        description: question['prompt'],
+        type: question['type'],
+        callbackSet: (description, type) {
+          question.reference.update({"prompt": description, "type": type});
+        }
+      )))
+    );
   }
 }
 
