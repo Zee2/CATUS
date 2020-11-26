@@ -177,7 +177,7 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
                       'groups': [],
                       'questionCount': 0,
                       'recipients': [],
-                      'description': 'Survey Description',
+                      'description': 'Tap to edit survey description and title',
                       'title': "Untitled Survey",
                       'draft': true
                     }).catchError((e) {

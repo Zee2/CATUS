@@ -159,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage>{
                                     
                                     selected: (value.data.docs[index].data()['users'].cast<String>()).contains(FirebaseAuth.instance.currentUser.uid),
                                     label: Text(value.data.docs[index].data()['name']),
-                                    onSelected: (selected){
+                                    onSelected: (selected) {
                                       if(selected) {
                                         value.data.docs[index].reference.update({'users': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])});
                                       } else {

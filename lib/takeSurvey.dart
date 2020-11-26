@@ -121,7 +121,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
                           widget.survey.reference.collection('questions').add({
                             'ordering': snapshot.data.docs.length + 1, // shush, lol
                             'type': 'text',
-                            'prompt': 'Untitled Question'
+                            'prompt': 'Tap to write your question prompt'
                           });
                         },
                       )
