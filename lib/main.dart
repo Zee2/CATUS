@@ -209,7 +209,7 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
             _pageViewController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
           },
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.send), label: "Outbox"),
+            BottomNavigationBarItem(icon: Icon(Icons.send), label: "Drafts"),
             BottomNavigationBarItem(icon: Icon(Icons.inbox), label: "Inbox"),
             BottomNavigationBarItem(icon: Icon(Icons.stacked_line_chart), label: "Results"),
           ],

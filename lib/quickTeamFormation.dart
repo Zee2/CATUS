@@ -230,14 +230,10 @@ class QuickTeamResults extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => QuickTeamResults(names, teamSize)),
-          );
+          Navigator.of(context).popUntil((route) => route.isFirst);
         },
-        child: Icon(Icons.shuffle),
+        child: Icon(Icons.close),
+        backgroundColor: Colors.redAccent,
       ),
       body: ListView(
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -286,9 +282,61 @@ class QuickTeamResults extends StatelessWidget {
           );
 
           // return members;
-        })
-        )
-      );
-    
+        }) + [
+          // reshuffle and edit buttons
+          Container(
+            margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0, bottom: 10.0),
+            child: RaisedButton(
+              elevation: 10,
+              child: Container(
+                height: 50.0,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Re-shuffle Team', style: Theme.of(context).textTheme.button.copyWith(color: Colors.white)),
+                  ]
+                )
+              ),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100.0),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => QuickTeamResults(names, teamSize)),
+                );
+              }
+            )
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0, bottom: 10.0),
+            child: RaisedButton(
+              elevation: 10,
+              child: Container(
+                height: 50.0,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Edit Team', style: Theme.of(context).textTheme.button.copyWith(color: Colors.white)),
+                  ]
+                )
+              ),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100.0),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            )
+          )
+        ]
+      )
+    );
   }
 }
