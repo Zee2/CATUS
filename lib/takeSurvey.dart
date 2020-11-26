@@ -145,6 +145,17 @@ class _TakeSurveyState extends State<TakeSurvey> {
                                     ),
                           onPressed: () {
                             print(answers);
+                            if(widget.survey.data()['draft']){
+                              widget.survey.reference.set({'draft': false}, SetOptions(merge: true));
+                              FirebaseFirestore.instance.collection('users').get().then((value) {
+                                List<String> users;
+                                for(var doc in value.docs){
+                                  users.add(doc.id);
+                                }
+                                return widget.survey.reference.set({'recipients': users}, SetOptions(merge:true));
+                              });
+                              
+                            }
                             widget.submitCallback();
                           },
 
