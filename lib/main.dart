@@ -105,7 +105,8 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
             children: <Widget>[
               Outbox(),
               Inbox(),
-              SurveyList(title: "Results", onlyOurs: false,),
+              Inbox(),
+              //SurveyList(title: "Results", onlyOurs: false,),
             ],
             onPageChanged: (index) {
               setState(() {
