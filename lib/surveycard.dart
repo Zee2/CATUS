@@ -235,6 +235,7 @@ class SurveyHero extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.headline2.merge(TextStyle(color: Colors.white)),
           ),
+          Container(height: 8),
           GroupsEditor(doc, editable)
         ]
       )

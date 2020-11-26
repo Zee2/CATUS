@@ -51,7 +51,8 @@ class _GroupsEditorState extends State<GroupsEditor>{
             } else {
               if(!widget.editable) {
                 return Wrap(
-                  spacing: 3.0,
+                  spacing: 8,
+                  runSpacing: -10,
                   children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
                       if((value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name'])){
                         //return GroupTag(groups.data.docs[groupIndex].data()['name']);
@@ -75,7 +76,7 @@ class _GroupsEditorState extends State<GroupsEditor>{
                 );
               } else {
                 return Wrap(
-                  spacing: 5,
+                  spacing: 8,
                   runSpacing: -10,
                   children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
                     
