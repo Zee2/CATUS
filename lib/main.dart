@@ -161,7 +161,8 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
                       'questionCount': 0,
                       'recipients': [],
                       'description': 'Survey Description',
-                      'title': "Untitled Survey"
+                      'title': "Untitled Survey",
+                      'draft': true
                     }).catchError((e) {
                       print("Exception while adding survey");
                       print(e);
