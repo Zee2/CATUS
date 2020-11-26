@@ -6,6 +6,7 @@ import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:number_to_words/number_to_words.dart';
 import "stringextension.dart";
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
 import 'package:catus/groups.dart';
 import 'package:catus/surveycard.dart';
 import 'package:catus/quickTeamFormation.dart';
@@ -201,7 +202,7 @@ class ResultGrid extends StatelessWidget {
               alignment: WrapAlignment.start,
               spacing: 20.0,
               runSpacing: 10.0,
-                children: List.generate(teamSize, (nameIndex){
+                children: List.generate(min(teamSize, completed.length), (nameIndex){
                   try {
                     var uid = completed[(myIndex + nameIndex) % completed.length];
                     return DatabasePersonBubble(uid: uid);
