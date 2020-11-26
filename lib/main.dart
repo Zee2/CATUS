@@ -160,9 +160,13 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
                       'groups': [],
                       'questionCount': 0,
                       'recipients': [],
+                      'description': 'Survey Description',
                       'title': "Untitled Survey"
                     }).catchError((e) {
                       print("Exception while adding survey");
+                      print(e);
+                    }).then((e) {
+                      // todo: navigate to the survey? close the fab menu?
                       print(e);
                     });
                   },
