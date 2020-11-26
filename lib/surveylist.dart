@@ -93,7 +93,7 @@ class _SurveyListState extends State<SurveyList>{
                 Image(image: AssetImage("assets/empty.png"), width: 300.0,),
                 Container(
                   margin: EdgeInsets.only(top: 20.0),
-                  child: Text(widget.authorMode ? "You don't have any active campaigns at this time." : widget.resultMode ? "You don't have any results. Try making a survey!" : "Woohoo! No surveys.")
+                  child: Text(widget.authorMode ? "No drafts yet. Try making a survey!" : (widget.resultMode ? "You don't have any results. Try making a survey!" : "Woohoo! No surveys."))
                 )
                 
               ],

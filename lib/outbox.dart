@@ -18,13 +18,13 @@ class Outbox extends StatelessWidget {
       if(snapshot.hasData){
         User user = snapshot.data;
         if(user.isAnonymous == false) {
-          return SurveyList(title: "Outbox", onlyOurs: false, authorMode: true, filter: (doc) {
+          return SurveyList(title: "Drafts", onlyOurs: false, authorMode: true, filter: (doc) {
             return (doc.data()['draft'] as bool);
           });
         } else {
           return Stack(
             children: [
-              SafeArea(child: Header(showText: true, showProfile: false, text: "Inbox")),
+              SafeArea(child: Header(showText: true, showProfile: false, text: "Drafts")),
               Center(child: promptLogin(context))
             ]
           );
@@ -32,7 +32,7 @@ class Outbox extends StatelessWidget {
       } else {
         return Stack(
             children: [
-              SafeArea(child: Header(showText: true, showProfile: false, text: "Inbox")),
+              SafeArea(child: Header(showText: true, showProfile: false, text: "Drafts")),
               Center(child: promptLogin(context))
             ]
           );
