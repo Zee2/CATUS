@@ -18,7 +18,9 @@ class Outbox extends StatelessWidget {
       if(snapshot.hasData){
         User user = snapshot.data;
         if(user.isAnonymous == false) {
-          return SurveyList(title: "Outbox", onlyOurs: false, authorMode: true);
+          return SurveyList(title: "Outbox", onlyOurs: false, authorMode: true, filter: (doc) {
+            return (doc.data()['draft'] as bool);
+          });
         } else {
           return Stack(
             children: [

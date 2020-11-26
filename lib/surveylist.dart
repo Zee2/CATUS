@@ -76,7 +76,7 @@ class _SurveyListState extends State<SurveyList>{
         int counter = 0;
         for(DocumentSnapshot doc in snapshot.data.docs) {
           if(widget.filter == null || (widget.filter != null && widget.filter(doc))){
-            listElements.add(widget.resultMode ? ResultCard(key: UniqueKey(), data:doc) : SurveyCard(key: UniqueKey(), data: doc));
+            listElements.add(widget.resultMode ? ResultCard(key: UniqueKey(), data:doc) : SurveyCard(key: UniqueKey(), data: doc, authorMode: widget.authorMode,));
             counter++;
           } else {
             print("Filtering a doc");

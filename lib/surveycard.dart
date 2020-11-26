@@ -14,8 +14,9 @@ import 'package:catus/editSurveyModal.dart';
 
 class SurveyCard extends StatefulWidget {
 
-  SurveyCard({Key key, this.data}) : super(key: key){
+  SurveyCard({Key key, this.data, this.authorMode = false}) : super(key: key){
   }
+  final bool authorMode;
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot data;
   final List<LinearGradient> gradients = [FlutterGradients.mindCrawl(),
@@ -94,7 +95,8 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
 
   sendCard(){
     isSent = true;
-    _sendController.forward().then((value) => widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])}));
+    if(!widget.authorMode)
+      _sendController.forward().then((value) => widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])}));
     // _sendController.forward();
     // Future.delayed(Duration(seconds: 5), () => widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])}));
     setState(() {});
