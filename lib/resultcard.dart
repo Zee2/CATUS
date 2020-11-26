@@ -181,15 +181,10 @@ class ResultGrid extends StatelessWidget {
     int myIndex = completed.indexOf(FirebaseAuth.instance.currentUser.uid);
     int teamSize = 4;
 
-    return GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount:  4,
-          childAspectRatio: 0.8,
-        ),
-        itemCount: teamSize,
-        itemBuilder: (BuildContext context, int nameIndex) {
+    return Center(
+      child: Wrap(
+      spacing: 20.0,
+        children: List.generate(teamSize, (nameIndex){
           try {
             var uid = completed[(myIndex + nameIndex) % completed.length];
             return DatabasePersonBubble(uid: uid);
@@ -197,6 +192,8 @@ class ResultGrid extends StatelessWidget {
             return Container();
           }
         }
+        )
+      )
     );
 
 
