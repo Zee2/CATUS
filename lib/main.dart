@@ -5,6 +5,7 @@ import 'package:catus/surveylist.dart';
 import 'package:catus/results.dart';
 import 'package:catus/inbox.dart';
 import 'package:catus/outbox.dart';
+import 'package:catus/signin.dart';
 import 'package:catus/quickTeamFormation.dart';
 import 'package:catus/homefab.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -170,23 +171,26 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
                 FloatingActionButton(
                   onPressed: () {
                     var user = FirebaseAuth.instance.currentUser;
-                    print(user);
-                    FirebaseFirestore.instance.collection("surveys").add({
-                      'author': user.uid,
-                      'completed': [],
-                      'groups': [],
-                      'questionCount': 0,
-                      'recipients': [],
-                      'description': 'Tap to edit survey description and title',
-                      'title': "Untitled Survey",
-                      'draft': true
-                    }).catchError((e) {
-                      print("Exception while adding survey");
-                      print(e);
-                    }).then((e) {
-                      // todo: navigate to the survey? close the fab menu?
-                      print(e);
-                    });
+                    if (user == null) {
+                      Navigator.push(context, createPopup(SignIn(goToProfile: false,)));
+                    } else {
+                      FirebaseFirestore.instance.collection("surveys").add({
+                        'author': user.uid,
+                        'completed': [],
+                        'groups': [],
+                        'questionCount': 0,
+                        'recipients': [],
+                        'description': 'Tap to edit survey description and title',
+                        'title': "Untitled Survey",
+                        'draft': true
+                      }).catchError((e) {
+                        print("Exception while adding survey");
+                        print(e);
+                      }).then((e) {
+                        // todo: navigate to the survey? close the fab menu?
+                        print(e);
+                      });
+                    }
                   },
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.blue,
