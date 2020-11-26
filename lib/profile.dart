@@ -36,6 +36,21 @@ class _ProfilePageState extends State<ProfilePage>{
                 children: [
                   Container(
                     constraints: BoxConstraints(maxWidth: 500.0),
+                    margin: EdgeInsets.only(left:20.0, right: 20.0, top: 20.0),
+                    child: Row(children: [
+                      FloatingActionButton(
+                        heroTag: null,
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back
+                        )
+                      )
+                    ],)
+                  ),
+                  Container(
+                    constraints: BoxConstraints(maxWidth: 500.0),
                     padding: EdgeInsets.all(20.0),
                     margin: EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
