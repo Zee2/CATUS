@@ -386,8 +386,45 @@ Future<UserCredential> createUser(String email, String password, String name) as
   if (errorMessage != null) {
     return Future.error(errorMessage);
   }
-  result.user.updateProfile(displayName: name);
-  FirebaseFirestore.instance.collection("users").doc(result.user.uid).set({'name': name});
+  await result.user.updateProfile(displayName: name);
+  await FirebaseFirestore.instance.collection("users").doc(result.user.uid).set({'name': name});
+
+  await FirebaseFirestore.instance.collection('surveys').add(
+    {
+      'author': "Big Brother",
+      'completed': [],
+      'description': 'This is an example survey, automatically created for you when you created your new account. This survey, along with quite a lot of metadata and all the questions/responses are stored on our Firebase realtime backend.',
+      'draft': false,
+      'groups': [],
+      'questionCount': 3,
+      'recipients': [
+        result.user.uid
+      ],
+      'title': 'Example Survey'
+    }
+  ).then((value) {
+    value.collection('questions').add(
+      {
+        'ordering': 1,
+        'prompt': 'There are several questions in this survey. Feel free to answer them! How are you feeling today?',
+        'type': 'text'
+      }
+    );
+    value.collection('questions').add(
+      {
+        'ordering': 2,
+        'prompt': 'There are also numerical-input questions. Rate, from 1-5, how cute your favorite pet is...',
+        'type': 'rate'
+      }
+    );
+    value.collection('questions').add(
+      {
+        'ordering': 3,
+        'prompt': 'Your responses are streamed in realtime to the database, and you never need to save your answers. Now, for the last question.... what is the meaning of life?',
+        'type': 'text'
+      }
+    );
+  });
   
   return result;
 }
