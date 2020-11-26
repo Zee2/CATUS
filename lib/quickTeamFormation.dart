@@ -203,9 +203,6 @@ class QuickTeamResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Team Results'),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pop(context);
@@ -217,40 +214,52 @@ class QuickTeamResults extends StatelessWidget {
         },
         child: Icon(Icons.shuffle),
       ),
-      body: Column(
-        children: [
-          Expanded(
-              child: ListView.builder(
-                  itemCount: names.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Column members = Column(
-                      children: [],
-                    );
+      body: ListView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        children: <Widget>[Header(
+          text: "Results",
+          showProfile: false,
+          showText: true,
+        )] + List.generate((names.length / teamSize).ceil(), (teamIndex) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
+            ),
+            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 0.0),
+            margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0, bottom: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("TEAM ${teamIndex + 1}", style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  letterSpacing: 2.0,
 
-                    if (index % teamSize == 0) {
-                      members.children.add(Container(
-                        height: 20,
-                        margin: EdgeInsets.all(2),
-                        color: Colors.white,
-                        child: Text("Team ${index ~/ teamSize + 1}"),
-                      ));
+                )),
+                Container(height: 20.0),
+                GridView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:  3,
+                      childAspectRatio: 1.0,
+                      crossAxisSpacing: 0.0,
+                      mainAxisSpacing: 0,
+                    ),
+                    itemCount: teamSize,
+                    itemBuilder: (BuildContext context, int nameIndex) {
+                      return PersonBubble(name: names[nameIndex + teamIndex]);
                     }
+                  )
+              ],
+            )
+          );
 
-                    members.children.add(Container(
-                      height: 50,
-                      margin: EdgeInsets.all(2),
-                      color: Colors.blue[400],
-                      child: Center(
-                          child: Text(
-                        '${names[index]}',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                    ));
-
-                    return members;
-                  }))
-        ],
-      ),
-    );
+          // return members;
+        })
+        )
+      );
+    
   }
 }
