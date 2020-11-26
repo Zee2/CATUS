@@ -8,12 +8,14 @@ import 'package:catus/signin.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+typedef FutureCallback = Future<void> Function();
+
 class TakeSurvey extends StatefulWidget {
 
   const TakeSurvey({Key key, this.index, this.survey, this.submitCallback}) : super(key: key);
 
   final String index;
-  final Function submitCallback;
+  final FutureCallback submitCallback;
 
   // Key-value of survey data. Schemaless.. oh boy
   final QueryDocumentSnapshot survey;
@@ -145,18 +147,19 @@ class _TakeSurveyState extends State<TakeSurvey> {
                                     ),
                           onPressed: () {
                             print(answers);
-                            if(widget.survey.data()['draft']){
-                              widget.survey.reference.set({'draft': false}, SetOptions(merge: true));
-                              FirebaseFirestore.instance.collection('users').get().then((value) {
-                                List<String> users = [];
-                                for(var doc in value.docs){
-                                  users.add(doc.id);
-                                }
-                                print("Adding recipients: " + users.toString());
-                                return widget.survey.reference.set({'recipients': users}, SetOptions(merge:true));
-                              });
-                            }
-                            widget.submitCallback();
+                            widget.submitCallback().then((value) {
+                              if(widget.survey.data()['draft']){
+                                widget.survey.reference.set({'draft': false}, SetOptions(merge: true));
+                                FirebaseFirestore.instance.collection('users').get().then((value) {
+                                  List<String> users = [];
+                                  for(var doc in value.docs){
+                                    users.add(doc.id);
+                                  }
+                                  print("Adding recipients: " + users.toString());
+                                  return widget.survey.reference.set({'recipients': users}, SetOptions(merge:true));
+                                });
+                              }
+                            });
                           },
 
                         )

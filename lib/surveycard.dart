@@ -93,13 +93,14 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
     setState(() {});
   }
 
-  sendCard(){
+  void sendCard() async {
     isSent = true;
-    if(!widget.authorMode)
-      _sendController.forward().then((value) => widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])}));
-    // _sendController.forward();
-    // Future.delayed(Duration(seconds: 5), () => widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])}));
-    setState(() {});
+    
+    await _sendController.forward().then((value) {
+      if(!widget.authorMode)
+        widget.data.reference.update({"completed": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser.uid])});
+      setState(() {});
+    });
   }
 
   @override
@@ -191,9 +192,9 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TakeSurvey(survey: widget.data, submitCallback: () {
+                        TakeSurvey(survey: widget.data, submitCallback: (){
                           tapCard();
-                          Future.delayed(const Duration(milliseconds: 200), () => sendCard());
+                          return Future.delayed(const Duration(milliseconds: 200), () => sendCard());
                         },)
                       ],
                     )
