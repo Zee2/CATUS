@@ -149,17 +149,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
                           onPressed: () {
                             print(answers);
                             widget.submitCallback().then((value) {
-                              if(widget.survey.data()['draft']){
-                                widget.survey.reference.set({'draft': false}, SetOptions(merge: true));
-                                FirebaseFirestore.instance.collection('users').get().then((value) {
-                                  List<String> users = [];
-                                  for(var doc in value.docs){
-                                    users.add(doc.id);
-                                  }
-                                  print("Adding recipients: " + users.toString());
-                                  return widget.survey.reference.set({'recipients': users}, SetOptions(merge:true));
-                                });
-                              }
+                              sendSurvey(widget.survey);
                             });
                           },
 
@@ -176,6 +166,22 @@ class _TakeSurveyState extends State<TakeSurvey> {
       }
     );
     
+  }
+}
+
+Future<void> sendSurvey(DocumentSnapshot survey) async {
+  if(survey.data()['draft']){
+    survey.reference.set({'draft': false}, SetOptions(merge: true));
+    List<String> groupsToSend = survey.data()['groups'].cast<String>();
+    Set<String> uids = {};
+
+    for(var groupName in groupsToSend) {
+      print("Finding users in " + groupName);
+      var groupDoc = await FirebaseFirestore.instance.collection('groups').where('name', isEqualTo: groupName).get();
+      uids.addAll(groupDoc.docs[0].data()['users'].cast<String>());
+    }
+
+    return survey.reference.set({'recipients': uids}, SetOptions(merge:true));
   }
 }
 
