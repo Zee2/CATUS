@@ -179,7 +179,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
                     children: [
                       Icon(Icons.access_time_outlined, size: 20.0, color: Colors.grey,),
                       Container(width: 10),
-                      Text((widget.data['questionCount'] * 0.1).toString() + " minutes", style: TextStyle(color: Colors.grey))
+                      Text((widget.data['questionCount'] * 0.1).toStringAsFixed(1) + " minutes", style: TextStyle(color: Colors.grey))
                     ]
                   )
                 ),
