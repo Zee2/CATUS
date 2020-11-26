@@ -49,34 +49,59 @@ class _GroupsEditorState extends State<GroupsEditor>{
             if(!value.hasData) {
               return Container();
             } else {
-              return Wrap(
-                spacing: 5,
-                runSpacing: -10,
-                children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
-                  if(!widget.editable) {
-                    if((value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name'])){
-                      return Container(
-                        padding: EdgeInsets.only(right: 5), child: GroupTag(groups.data.docs[groupIndex].data()['name'])
-                      );
-                    } else {
-                      return Container();
-                    }
-                  }
-                  
-                  return FilterChip(
-                    selectedColor: Colors.lightBlueAccent,
-                    selected: (value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name']),
-                    label: Text(groups.data.docs[groupIndex].data()['name']),
-                    onSelected: (selected) {
-                      if(selected) {
-                        value.data.reference.update({'groups': FieldValue.arrayUnion([groups.data.docs[groupIndex].data()['name']])});
+              if(!widget.editable) {
+                return Wrap(
+                  spacing: 3.0,
+                  children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
+                      if((value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name'])){
+                        //return GroupTag(groups.data.docs[groupIndex].data()['name']);
+                        return Theme(
+                          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                          child: FilterChip(
+                            selectedColor: Colors.white,
+                            backgroundColor: Colors.black.withOpacity(0.3),
+                            labelStyle: DefaultTextStyle.of(context).style.copyWith(color: MaterialStateColor.resolveWith((states) {
+                              return states.contains(MaterialState.selected) ? Colors.black : Colors.white;
+                            })),
+                            label: Text(groups.data.docs[groupIndex].data()['name']),
+                            onSelected: (selected) {}
+                          )
+                        );
                       } else {
-                        value.data.reference.update({'groups': FieldValue.arrayRemove([groups.data.docs[groupIndex].data()['name']])});
+                        return Container(width:0);
                       }
                     }
-                  );
-                })
-              );
+                  )
+                );
+              } else {
+                return Wrap(
+                  spacing: 5,
+                  runSpacing: -10,
+                  children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
+                    
+                    return Theme(
+                      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                      child: FilterChip(
+                        selectedColor: Colors.white,
+                        backgroundColor: Colors.black.withOpacity(0.3),
+                        labelStyle: DefaultTextStyle.of(context).style.copyWith(color: MaterialStateColor.resolveWith((states) {
+                          return states.contains(MaterialState.selected) ? Colors.black : Colors.white;
+                        })),
+                        selected: (value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name']),
+                        label: Text(groups.data.docs[groupIndex].data()['name']),
+                        onSelected: (selected) {
+                          if(selected) {
+                            value.data.reference.update({'groups': FieldValue.arrayUnion([groups.data.docs[groupIndex].data()['name']])});
+                          } else {
+                            value.data.reference.update({'groups': FieldValue.arrayRemove([groups.data.docs[groupIndex].data()['name']])});
+                          }
+                        }
+                      )
+                    );
+                  })
+                );
+              }
+              
             }
           }
         );
