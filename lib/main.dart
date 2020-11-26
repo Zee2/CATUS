@@ -152,13 +152,19 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
                 ),
                 FloatingActionButton(
                   onPressed: () {
-                    print("Todo: create survey page if logged in, otherwise log in");
-                    /*
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CreateSurvey()),
-                    );
-                    */
+                    var user = FirebaseAuth.instance.currentUser;
+                    print(user);
+                    FirebaseFirestore.instance.collection("surveys").add({
+                      'author': user.uid,
+                      'completed': [],
+                      'groups': [],
+                      'questionCount': 0,
+                      'recipients': [],
+                      'title': "Untitled Survey"
+                    }).catchError((e) {
+                      print("Exception while adding survey");
+                      print(e);
+                    });
                   },
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.blue,
