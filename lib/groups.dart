@@ -50,30 +50,28 @@ class _GroupsEditorState extends State<GroupsEditor>{
               return SizedBox.shrink();
             } else {
               if(!widget.editable) {
+
+                var surveyGroups = value.data.data()['groups'].cast<String>();
+
                 return Wrap(
                   alignment: WrapAlignment.start,
                   runAlignment: WrapAlignment.start,
                   crossAxisAlignment: WrapCrossAlignment.start,
                   spacing: 5,
                   runSpacing: 5,
-                  children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
-                      if((value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name'])){
-                        //return GroupTag(groups.data.docs[groupIndex].data()['name']);
-                        return Theme(
-                          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-                          child: FilterChip(
-                            selectedColor: Colors.white,
-                            backgroundColor: Colors.black.withOpacity(0.3),
-                            labelStyle: DefaultTextStyle.of(context).style.copyWith(color: MaterialStateColor.resolveWith((states) {
-                              return states.contains(MaterialState.selected) ? Colors.black : Colors.white;
-                            })),
-                            label: Text(groups.data.docs[groupIndex].data()['name']),
-                            onSelected: (selected) {}
-                          )
-                        );
-                      } else {
-                        return SizedBox.shrink();
-                      }
+                  children: List<Widget>.generate(surveyGroups.length, (groupIndex) {
+                    return Theme(
+                        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                        child: FilterChip(
+                          selectedColor: Colors.white,
+                          backgroundColor: Colors.black.withOpacity(0.3),
+                          labelStyle: DefaultTextStyle.of(context).style.copyWith(color: MaterialStateColor.resolveWith((states) {
+                            return states.contains(MaterialState.selected) ? Colors.black : Colors.white;
+                          })),
+                          label: Text(surveyGroups[groupIndex]),
+                          onSelected: (selected) {}
+                        )
+                      );
                     }
                   )
                 );
