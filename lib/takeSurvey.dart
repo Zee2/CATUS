@@ -99,6 +99,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
                       //return TextQuestion(prompt: snapshot.data.docs[index]['prompt'],);
                     }) + (widget.survey.data()['draft'] as bool == true ? [
                       // add question button
+                      Container(height: 20.0),
                       RaisedButton(
                         elevation: 10,
                         child: Container(
