@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:catus/groups.dart';
+import 'package:catus/signin.dart';
+import 'package:catus/newGroupModal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -14,6 +15,7 @@ class _ProfilePageState extends State<ProfilePage>{
 
   Stream<QuerySnapshot> groupsStream;
   Stream<QuerySnapshot> groupMembershipStream;
+  CollectionReference groupsCollection;
 
   Map<String, bool> localGroupStatus;
 
@@ -22,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage>{
     super.initState();
 
     groupsStream = FirebaseFirestore.instance.collection('groups').snapshots();
-
+    groupsCollection = FirebaseFirestore.instance.collection('groups');
   }
 
   @override
@@ -182,7 +184,18 @@ class _ProfilePageState extends State<ProfilePage>{
                                       }
                                     }
                                   );
-                                })
+                                })..add(
+                                  ActionChip(
+                                    backgroundColor: Colors.greenAccent,
+                                    label: Text("New Group"),
+                                    avatar: Icon(Icons.add),
+                                    onPressed: () => Navigator.push(context, createPopup(NewGroupModal(
+                                      callbackSet: (name) {
+                                        groupsCollection.add({'name': name, 'users': []});
+                                      }
+                                    )))
+                                  )
+                                )
                               );
                             }
                           }
