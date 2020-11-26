@@ -21,8 +21,8 @@ class SurveyCard extends StatefulWidget {
   final QueryDocumentSnapshot data;
   final List<LinearGradient> gradients = [FlutterGradients.mindCrawl(),
       FlutterGradients.solidStone(),
-      FlutterGradients.blackSea(),
-      FlutterGradients.spaceShift()];
+      FlutterGradients.eternalConstance(),
+      FlutterGradients.mindCrawl(),];
 
   @override
   _SurveyCardState createState() => _SurveyCardState();

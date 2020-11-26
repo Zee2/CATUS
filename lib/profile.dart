@@ -152,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage>{
                             } else {
                               return Wrap(
                                 spacing: 5,
-                                runSpacing: -10,
+                                runSpacing: 5,
                                 children: List<Widget>.generate(value.data.docs.length, (index) {
                                   return FilterChip(
                                     selectedColor: Colors.lightBlueAccent,

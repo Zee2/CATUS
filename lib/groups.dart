@@ -47,12 +47,15 @@ class _GroupsEditorState extends State<GroupsEditor>{
           stream: documentStream,
           builder: (context, AsyncSnapshot<DocumentSnapshot> value) {
             if(!value.hasData) {
-              return Container();
+              return SizedBox.shrink();
             } else {
               if(!widget.editable) {
                 return Wrap(
-                  spacing: 8,
-                  runSpacing: -10,
+                  alignment: WrapAlignment.start,
+                  runAlignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  spacing: 5,
+                  runSpacing: 5,
                   children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
                       if((value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name'])){
                         //return GroupTag(groups.data.docs[groupIndex].data()['name']);
@@ -69,15 +72,15 @@ class _GroupsEditorState extends State<GroupsEditor>{
                           )
                         );
                       } else {
-                        return Container(width:0);
+                        return SizedBox.shrink();
                       }
                     }
                   )
                 );
               } else {
                 return Wrap(
-                  spacing: 8,
-                  runSpacing: -10,
+                  spacing: 5,
+                  runSpacing: 5,
                   children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
                     
                     return Theme(
