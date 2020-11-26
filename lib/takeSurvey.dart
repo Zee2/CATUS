@@ -114,6 +114,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
                                   borderRadius: BorderRadius.circular(100.0),
                                   ),
                         onPressed: () {
+                          widget.survey.reference.update({'questionCount': snapshot.data.docs.length + 1});
                           widget.survey.reference.collection('questions').add({
                             'ordering': snapshot.data.docs.length + 1, // shush, lol
                             'type': 'text',
