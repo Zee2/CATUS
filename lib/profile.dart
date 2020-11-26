@@ -32,7 +32,7 @@ class ProfilePage extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("John Doe", style: Theme.of(context).textTheme.headline3,),
+                          Text(FirebaseAuth.instance.currentUser.displayName ?? " ", style: Theme.of(context).textTheme.headline3,),
                           Text(FirebaseAuth.instance.currentUser.email),
                           Text("Email verified: " + FirebaseAuth.instance.currentUser.emailVerified.toString()),
                         ],

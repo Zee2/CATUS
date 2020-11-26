@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:catus/profile.dart';
 
 Route createPopup(Widget page) {
@@ -341,7 +342,7 @@ class _SignUpState extends State<SignUp> {
                           print("Creating user, email = " + email);
                          
                           setState(() {
-                            userCred = createUser(email, password);
+                            userCred = createUser(email, password, name);
                             userCred.then((userCred) {
                               Navigator.of(context).popUntil((route) => route.isFirst);
                               if(widget.goToProfile) {
@@ -368,7 +369,7 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-Future<UserCredential> createUser(String email, String password) async {
+Future<UserCredential> createUser(String email, String password, String name) async {
   String errorMessage;
   UserCredential result;
   try {
@@ -385,7 +386,9 @@ Future<UserCredential> createUser(String email, String password) async {
   if (errorMessage != null) {
     return Future.error(errorMessage);
   }
-
+  result.user.updateProfile(displayName: name);
+  FirebaseFirestore.instance.collection("users").doc(result.user.uid).set({'name': name});
+  
   return result;
 }
 
