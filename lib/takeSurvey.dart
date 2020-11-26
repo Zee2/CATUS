@@ -85,7 +85,7 @@ class _TakeSurveyState extends State<TakeSurvey> {
                   child: Column(
                     children: List<Widget>.generate(snapshot.data.docs.length, (index) {
                       var question = snapshot.data.docs[index];
-                      if (widget.survey['draft']) {
+                      if (widget.survey.data()['draft']) {
                         return SurveyQuestion(question: question, updateCallback: processEdit, draft: true);
                       } else {
                         if(downloadedResponses.data.data() == null){
@@ -95,7 +95,33 @@ class _TakeSurveyState extends State<TakeSurvey> {
                         }
                       }
                       //return TextQuestion(prompt: snapshot.data.docs[index]['prompt'],);
-                    }) + [
+                    }) + (widget.survey.data()['draft'] as bool == true ? [
+                      // add question button
+                      RaisedButton(
+                        elevation: 10,
+                        child: Container(
+                          height: 50.0,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text('Add Question', style: Theme.of(context).textTheme.button.copyWith(color: Colors.white)),
+                            ]
+                          )
+                        ),
+                        color: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  ),
+                        onPressed: () {
+                          widget.survey.reference.collection('questions').add({
+                            'ordering': snapshot.data.docs.length + 1, // shush, lol
+                            'type': 'text',
+                            'prompt': 'Untitled Question'
+                          });
+                        },
+                      )
+                    ] : []) + [
                       Container(
                         padding: EdgeInsets.only(top: 20.0),
                         child: RaisedButton(
@@ -165,8 +191,9 @@ class SurveyQuestion extends StatelessWidget {
       child: draw,
       onTap: () => Navigator.push(context, createPopup(EditQuestionModal(
         description: question['prompt'],
-        callbackSet: (description) {
-          question.reference.update({"prompt": description});
+        type: question['type'],
+        callbackSet: (description, type) {
+          question.reference.update({"prompt": description, "type": type});
         }
       )))
     );

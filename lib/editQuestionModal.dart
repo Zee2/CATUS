@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class EditQuestionModal extends StatefulWidget {
 
-  EditQuestionModal({Key key, this.description, this.callbackSet}) : super(key: key);
+  EditQuestionModal({Key key, this.description, this.type, this.callbackSet}) : super(key: key);
 
   final String description;
+  final String type;
   final Function callbackSet;
 
   @override
@@ -13,11 +14,13 @@ class EditQuestionModal extends StatefulWidget {
 
 class _EditQuestionModalState extends State<EditQuestionModal> {
   String _description;
+  String _type;
 
   @override
   void initState() {
     super.initState();
     _description = widget.description;
+    _type = widget.type;
   }
 
   @override
@@ -48,20 +51,34 @@ class _EditQuestionModalState extends State<EditQuestionModal> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Question Text",
+                        "Question Settings",
                         style: Theme.of(context).textTheme.headline2,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
                       ),
                       Text(
                         "Enter the display text for this question"
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Text",
-                        ),
                         initialValue: _description,
                         maxLines: null,
                         onChanged: (value) => setState(() { _description = value; }),
                       ),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                      ),
+                      Text(
+                        "Select the response type"
+                      ),
+                      DropdownButton<String>(
+                        value: _type,
+                        items: [
+                          DropdownMenuItem(child: Text("Rate slider"), value: "rate"),
+                          DropdownMenuItem(child: Text("Text box"), value: "text")
+                        ],
+                        onChanged: (value) => setState(() { _type = value; }),
+                      )
                     ],
                   )
                 ),
@@ -75,7 +92,7 @@ class _EditQuestionModalState extends State<EditQuestionModal> {
                   children: [
                     FloatingActionButton.extended(
                       onPressed: () {
-                        widget.callbackSet(_description);
+                        widget.callbackSet(_description, _type);
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       },
                       backgroundColor: Colors.blue,
