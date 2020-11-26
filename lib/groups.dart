@@ -4,17 +4,87 @@ import 'package:catus/header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Tags extends StatelessWidget {
-  const Tags(this.tags);
+class GroupsEditor extends StatefulWidget {
 
-  final List<String> tags;
+  const GroupsEditor(this.doc, this.editable);
+
+  final DocumentSnapshot doc;
+  final bool editable;
+
+  @override
+  _GroupsEditorState createState() => _GroupsEditorState();
+}
+
+class _GroupsEditorState extends State<GroupsEditor>{
+
+  Stream<DocumentSnapshot> documentStream;
+  Future<QuerySnapshot> groupsQuery;
+
+  @override
+  void initState() {
+    super.initState();
+    documentStream = widget.doc.reference.snapshots();
+    groupsQuery = FirebaseFirestore.instance.collection('groups').get();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-        children: List.generate(tags.length, (index) {
-      return Container(
-          padding: EdgeInsets.only(right: 5), child: GroupTag(tags[index]));
-    }));
+
+    // if(!widget.editable){
+    //   return Row(
+    //     children: List.generate(tags.length, (index) {
+    //       return Container(
+    //           padding: EdgeInsets.only(right: 5), child: GroupTag(tags[index]));
+    //     }));
+    // }
+    return FutureBuilder(
+      future: groupsQuery,
+      builder: (context, AsyncSnapshot<QuerySnapshot> groups) {
+        if(!groups.hasData){
+          return Container();
+        }
+        return StreamBuilder(
+          stream: documentStream,
+          builder: (context, AsyncSnapshot<DocumentSnapshot> value) {
+            if(!value.hasData) {
+              return Container();
+            } else {
+              return Wrap(
+                spacing: 5,
+                runSpacing: -10,
+                children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
+                  if(!widget.editable) {
+                    if((value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name'])){
+                      return Container(
+                        padding: EdgeInsets.only(right: 5), child: GroupTag(groups.data.docs[groupIndex].data()['name'])
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }
+                  
+                  return FilterChip(
+                    selectedColor: Colors.lightBlueAccent,
+                    selected: (value.data.data()['groups'].cast<String>()).contains(groups.data.docs[groupIndex].data()['name']),
+                    label: Text(groups.data.docs[groupIndex].data()['name']),
+                    onSelected: (selected) {
+                      if(selected) {
+                        value.data.reference.update({'groups': FieldValue.arrayUnion([groups.data.docs[groupIndex].data()['name']])});
+                      } else {
+                        value.data.reference.update({'groups': FieldValue.arrayRemove([groups.data.docs[groupIndex].data()['name']])});
+                      }
+                    }
+                  );
+                })
+              );
+            }
+          }
+        );
+      }
+    );
+    
+    
+    // 
   }
 }
 

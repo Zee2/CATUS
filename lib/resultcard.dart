@@ -137,7 +137,7 @@ class _ResultCardState extends State<ResultCard> with TickerProviderStateMixin {
             child: Column(children: [
                 GestureDetector(
                   onTap: () => tapCard(),
-                  child: SurveyHero(title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: gradient)
+                  child: SurveyHero(widget.data, title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: gradient)
                 ),
                 
                 Container(

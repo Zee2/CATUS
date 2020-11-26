@@ -140,7 +140,7 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
             child: Column(children: [
                 GestureDetector(
                   onTap: () => tapCard(),
-                  child: SurveyHero(title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: gradient)
+                  child: SurveyHero(widget.data, editable: widget.authorMode, title: widget.data['title'], groups: widget.data['groups'].cast<String>(), gradient: gradient)
                 ),
                 GestureDetector(
                   onTap: () {
@@ -211,10 +211,11 @@ class _SurveyCardState extends State<SurveyCard> with TickerProviderStateMixin {
 
 class SurveyHero extends StatelessWidget {
 
-  const SurveyHero({Key key, this.gradient, this.title, this.groups}) : super(key: key);
-
+  const SurveyHero(DocumentSnapshot this.doc, {Key key, this.editable = false, this.gradient, this.title, this.groups}) : super(key: key);
+  final DocumentSnapshot doc;
   final LinearGradient gradient;
   final String title;
+  final bool editable;
   final List<String> groups;
 
   @override
@@ -235,7 +236,7 @@ class SurveyHero extends StatelessWidget {
             style: Theme.of(context).textTheme.headline2.merge(TextStyle(color: Colors.white)),
           ),
           Container(height: 12),
-          Tags(groups),
+          GroupsEditor(doc, editable)
         ]
       )
     );
