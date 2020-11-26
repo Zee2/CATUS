@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:catus/header.dart';
 
 class QuickTeamFormation extends StatefulWidget {
   @override
@@ -26,27 +27,43 @@ class _QuickTeamFormationState extends State<QuickTeamFormation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Quick Team Formation'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            if(names.length > 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => QuickTeamResults(names, teamSize)),
-              );
-            }
-          },
-          child: Icon(Icons.shuffle),
-        ),
-        body: Form(
+      resizeToAvoidBottomPadding: false,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if(names.length > 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => QuickTeamResults(names, teamSize)),
+            );
+          }
+        },
+        child: Icon(Icons.shuffle),
+      ),
+      body: Column(
+        children: [
+          SafeArea(
+            child: Header(
+              text: "Quick Team",
+              showProfile: false,
+              showText: true,
+            )
+          ),
+          Form(
             key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(children: [
-                TextFormField(
+            child: Container(
+              decoration: BoxDecoration(  
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
+              ),
+              padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 0.0, bottom: 20.0),
+              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 0.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
                     decoration: InputDecoration(
                       labelText: "Event Name",
                     ),
@@ -56,8 +73,9 @@ class _QuickTeamFormationState extends State<QuickTeamFormation> {
                         return "Please enter your event name";
                       else
                         return null;
-                    }),
-                TextFormField(
+                    }
+                  ),
+                  TextFormField(
                     decoration: InputDecoration(
                       labelText: "Team Size",
                     ),
@@ -67,36 +85,105 @@ class _QuickTeamFormationState extends State<QuickTeamFormation> {
                         return "Please enter your team size";
                       else
                         return null;
-                    }),
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Member Name',
+                    }
                   ),
-                ),
-                RaisedButton(
-                  child: Text('Add Member'),
-                  onPressed: () {
-                    addMemberToList();
-                  },
-                ),
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: names.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            height: 50,
-                            margin: EdgeInsets.all(2),
-                            color: Colors.blue[400],
-                            child: Center(
-                                child: Text(
-                              '${names[index]}',
-                              style: TextStyle(fontSize: 18),
-                            )),
-                          );
-                        }))
-              ]),
-            )));
+                  
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Member Name',
+                    ),
+                  ),
+                  Container(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FloatingActionButton.extended(
+                      onPressed: () => addMemberToList(),
+                      heroTag: null,
+                      backgroundColor: Colors.blueAccent,
+                      label: Text("ADD MEMBER"),
+                      icon: Icon(Icons.add)
+                    )
+                    ],
+                  )
+                  
+                ]
+              ),
+            )
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(  
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
+              ),
+              padding: EdgeInsets.all(20.0),
+              margin: EdgeInsets.all(20.0).copyWith(bottom: 100.0),
+              child: GridView.builder(
+                padding: EdgeInsets.zero,
+                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  shrinkWrap: false,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:  3,
+                    childAspectRatio: 1.0,
+                    crossAxisSpacing: 0.0,
+                    mainAxisSpacing: 0,
+                  ),
+                  itemCount: names.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return PersonBubble(name: names[index]);
+                  }
+                )
+            )
+          )
+        ]
+      )
+    );
+  }
+}
+
+class PersonBubble extends StatelessWidget {
+
+  const PersonBubble({Key key, this.name}) : super(key: key);
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 70.0,
+          height: 70.0,
+          padding: EdgeInsets.all(2),
+          decoration: BoxDecoration(  
+            color: Colors.white,
+            shape: BoxShape.circle,
+            // borderRadius: BorderRadius.all(Radius.circular(10)),
+            border: Border.all(width: 2.0, color: Theme.of(context).accentColor)
+            //boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.5), spreadRadius: 0, blurRadius: 20, offset: Offset(0,1))]
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(100)),
+            child: Image(
+                image: AssetImage("assets/anonUser.png"),
+                fit: BoxFit.cover,
+                width: 55.0,
+                height: 55.0,
+              )
+          )
+        ),
+        Container(
+          margin: EdgeInsets.only(top:5.0),
+          child: Text(
+            this.name
+          )
+        )
+      ],
+      
+    );
   }
 }
 
