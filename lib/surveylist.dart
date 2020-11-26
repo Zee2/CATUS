@@ -1,18 +1,19 @@
 import 'package:catus/surveycard.dart';
 import 'package:flutter/material.dart';
 import 'package:catus/header.dart';
-
+import 'package:catus/resultcard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SurveyList extends StatefulWidget {
 
-  SurveyList({Key key, this.title, this.onlyOurs, this.authorMode = false, this.filter}) : super(key: key);
+  SurveyList({Key key, this.title, this.onlyOurs, this.authorMode = false, this.resultMode = false, this.filter}) : super(key: key);
 
   final String title;
   final bool onlyOurs;
   final bool authorMode;
+  final bool resultMode;
   final Function(DocumentSnapshot) filter;
 
   @override
@@ -30,6 +31,11 @@ class _SurveyListState extends State<SurveyList>{
   @override
   void initState(){
     super.initState();
+
+    if(widget.resultMode) {
+      assert(widget.onlyOurs);
+      assert(!widget.authorMode);
+    }
 
     if(widget.onlyOurs) {
       var user = FirebaseAuth.instance.currentUser;
@@ -70,7 +76,7 @@ class _SurveyListState extends State<SurveyList>{
         int counter = 0;
         for(DocumentSnapshot doc in snapshot.data.docs) {
           if(widget.filter == null || (widget.filter != null && widget.filter(doc))){
-            listElements.add(SurveyCard(key: UniqueKey(), data: doc));
+            listElements.add(widget.resultMode ? ResultCard(key: UniqueKey(), data:doc) : SurveyCard(key: UniqueKey(), data: doc));
             counter++;
           } else {
             print("Filtering a doc");
@@ -98,34 +104,6 @@ class _SurveyListState extends State<SurveyList>{
           physics: BouncingScrollPhysics(),
           children: listElements
         );
-
-
-        // if(snapshot.data.docs.length == 0) {
-        //   return ListView(
-        //     children: [
-        //       Header(showText: true, showProfile: false, text: widget.title),
-              
-              
-        //     ]
-        //   );
-        // }
-
-        // return ListView.builder(
-        //   physics: BouncingScrollPhysics(),
-        //   itemCount: snapshot.data.docs.length + 1,
-        //   itemBuilder: (context, index) {
-        //     if(index == 0)
-        //       return Header(showText: true, showProfile: false, text: widget.title);
-        //     else {
-        //       var doc = snapshot.data.docs[index-1];
-        //       if(widget.filter == null || (widget.filter != null && widget.filter(doc))){
-        //         return SurveyCard(data: snapshot.data.docs[index-1], index: index - 1, isLast: index == snapshot.data.docs.length);
-        //       }
-                
-        //     }
-            
-        //   }
-        // );
       }
     );
   }

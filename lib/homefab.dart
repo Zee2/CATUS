@@ -25,35 +25,38 @@ class _HomeFABState extends State<HomeFAB> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: this.widget.children.map<Widget>((child) => FadeTransition(
-        opacity: CurvedAnimation(
-          parent: _controller,
-          curve: new Interval(
-            0.0,
-            1.0,
-            curve: Curves.easeInOut
-          )
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: child
-        )
-      )).toList()..add(
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FloatingActionButton(
-            onPressed: () {
-              if (_open) _controller.reverse();
-              else _controller.forward();
-              setState(() { _open = !_open; });
-            },
-            child: Icon(Icons.add)
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: this.widget.children.map<Widget>((child) => FadeTransition(
+          opacity: CurvedAnimation(
+            parent: _controller,
+            curve: new Interval(
+              0.0,
+              1.0,
+              curve: Curves.easeInOut
+            )
           ),
+          child: IgnorePointer(
+            ignoring: !_open,
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: child
+            )
+          )
+        )).toList()..add(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                if (_open) _controller.reverse();
+                else _controller.forward();
+                setState(() { _open = !_open; });
+              },
+              child: Icon(Icons.add)
+            ),
+          )
         )
-      )
-    );
+      );
   }
 }

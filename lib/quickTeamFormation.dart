@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:catus/header.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuickTeamFormation extends StatefulWidget {
   @override
@@ -145,6 +147,27 @@ class _QuickTeamFormationState extends State<QuickTeamFormation> {
   }
 }
 
+class DatabasePersonBubble extends StatelessWidget {
+  const DatabasePersonBubble({Key key, this.uid}) : super(key: key);
+
+  final String uid;
+
+  @override
+  Widget build(BuildContext context) {
+    Future<DocumentSnapshot> usernameQuery = FirebaseFirestore.instance.collection("users").doc(uid).get();
+    return FutureBuilder(
+      future: usernameQuery,
+      builder: (context, userDoc) {
+        try {
+          return PersonBubble(name: userDoc.data['name']);
+        } catch(e){
+          return PersonBubble(name: "Anon");
+        }
+      }
+    );
+  }
+}
+
 class PersonBubble extends StatelessWidget {
 
   const PersonBubble({Key key, this.name}) : super(key: key);
@@ -152,11 +175,12 @@ class PersonBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Container(
-          width: 70.0,
-          height: 70.0,
+          width: 60.0,
+          height: 60.0,
           padding: EdgeInsets.all(2),
           decoration: BoxDecoration(  
             color: Colors.white,
@@ -178,7 +202,8 @@ class PersonBubble extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(top:5.0),
           child: Text(
-            this.name
+            this.name,
+            textAlign: TextAlign.center,
           )
         )
       ],
