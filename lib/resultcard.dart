@@ -20,8 +20,8 @@ class ResultCard extends StatefulWidget {
   final QueryDocumentSnapshot data;
   final List<LinearGradient> gradients = [FlutterGradients.mindCrawl(),
       FlutterGradients.solidStone(),
-      FlutterGradients.blackSea(),
-      FlutterGradients.spaceShift()];
+      FlutterGradients.eternalConstance(),
+      FlutterGradients.mindCrawl(),];
 
   @override
   _ResultCardState createState() => _ResultCardState();
@@ -174,7 +174,7 @@ class ResultGrid extends StatelessWidget {
   final QueryDocumentSnapshot survey;
   
   @override
-  Widget build(BuildContext build) {
+  Widget build(BuildContext context) {
 
     List<String> completed = survey['completed'].cast<String>();
 
@@ -182,18 +182,39 @@ class ResultGrid extends StatelessWidget {
     int teamSize = 4;
 
     return Center(
-      child: Wrap(
-      spacing: 20.0,
-        children: List.generate(teamSize, (nameIndex){
-          try {
-            var uid = completed[(myIndex + nameIndex) % completed.length];
-            return DatabasePersonBubble(uid: uid);
-          } catch (re){
-            return Container();
-          }
-        }
+      child: Container(
+        decoration: BoxDecoration(  
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              border: Border.all(width: 2.0, color: Colors.black.withOpacity(0.1)),
+              boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
+            ),
+        padding: EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            Text("YOUR TEAM", style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  letterSpacing: 2.0,
+                  color: Colors.black.withOpacity(0.5)
+                )),
+            Container(height: 22.0),
+            Wrap(
+              alignment: WrapAlignment.start,
+              spacing: 20.0,
+              runSpacing: 10.0,
+                children: List.generate(teamSize, (nameIndex){
+                  try {
+                    var uid = completed[(myIndex + nameIndex) % completed.length];
+                    return DatabasePersonBubble(uid: uid);
+                  } catch (re){
+                    return Container();
+                  }
+                }
+              )
+            )
+          ]
         )
       )
+      
     );
 
 
