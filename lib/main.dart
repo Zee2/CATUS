@@ -119,7 +119,7 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
           SafeArea(child: Header( showText: false, showProfile: true, text: "",)),
         ],
       ),
-      floatingActionButton: HomeFAB(
+      floatingActionButton: _activePage == 0 ? HomeFAB(
         children: [
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -200,7 +200,7 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
               ],
             )
         ]
-      ),
+      ) : null,
       bottomNavigationBar: BottomAppBar(
         child: BottomNavigationBar(
           elevation: 20.0,
