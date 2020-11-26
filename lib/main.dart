@@ -2,6 +2,7 @@ import 'package:catus/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:catus/surveylist.dart';
+import 'package:catus/results.dart';
 import 'package:catus/inbox.dart';
 import 'package:catus/outbox.dart';
 import 'package:catus/quickTeamFormation.dart';
@@ -105,7 +106,7 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
             children: <Widget>[
               Outbox(),
               Inbox(),
-              Inbox(),
+              Results(),
               //SurveyList(title: "Results", onlyOurs: false,),
             ],
             onPageChanged: (index) {
