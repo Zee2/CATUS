@@ -249,7 +249,11 @@ class QuickTeamResults extends StatelessWidget {
                     ),
                     itemCount: teamSize,
                     itemBuilder: (BuildContext context, int nameIndex) {
-                      return PersonBubble(name: names[nameIndex + teamIndex]);
+                      try {
+                        return PersonBubble(name: names[teamIndex * teamSize + nameIndex]);
+                      } catch (re){
+                        return Container();
+                      }
                     }
                   )
               ],
