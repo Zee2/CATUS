@@ -4,6 +4,7 @@ import 'package:catus/signin.dart';
 import 'package:catus/newGroupModal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:catus/profileEditModal.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -39,7 +40,10 @@ class _ProfilePageState extends State<ProfilePage>{
                   Container(
                     constraints: BoxConstraints(maxWidth: 500.0),
                     margin: EdgeInsets.only(left:20.0, right: 20.0, top: 20.0),
-                    child: Row(children: [
+                    child: Row(
+                      
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                       FloatingActionButton(
                         heroTag: null,
                         onPressed: (){
@@ -47,6 +51,29 @@ class _ProfilePageState extends State<ProfilePage>{
                         },
                         child: Icon(
                           Icons.arrow_back
+                        )
+                      ),
+                      FloatingActionButton(
+                        heroTag: null,
+                        backgroundColor: Colors.grey,
+                        onPressed: (){
+                          Navigator.push(context, createPopup(EditProfileModal(
+                            name: FirebaseAuth.instance.currentUser.displayName,
+                            email: FirebaseAuth.instance.currentUser.email,
+                            callbackSet: (name, email) async {
+                              
+                              await FirebaseAuth.instance.currentUser.updateProfile(
+                                displayName: name
+                              );
+                              await FirebaseAuth.instance.currentUser.updateEmail(email);
+                              
+                              setState((){});
+
+                            }
+                          )));
+                        },
+                        child: Icon(
+                          Icons.edit
                         )
                       )
                     ],)
@@ -74,21 +101,28 @@ class _ProfilePageState extends State<ProfilePage>{
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  FirebaseAuth.instance.currentUser.displayName ?? "",
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                Text(FirebaseAuth.instance.currentUser.email),
-                                Text("Email verified: " +
-                                    FirebaseAuth.instance.currentUser.emailVerified
-                                        .toString())
-                              ],
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      FirebaseAuth.instance.currentUser.displayName ?? "",
+                                      style: Theme.of(context).textTheme.headline3,
+                                    ),
+                                  
+                                  Text(FirebaseAuth.instance.currentUser.email),
+                                  Text("Email verified: " +
+                                      FirebaseAuth.instance.currentUser.emailVerified
+                                          .toString())
+                                ],
+                              ),
                             ),
+                            // FloatingActionButton(
+                            //   onPressed: (){},
+                            //   mini: true,
+                            // ),
                             Hero(
                                 tag: "profileButton",
                                 child: ElevatedButton(
@@ -123,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage>{
                                     ))),
                           ],
                         ),
-                        //Container(height: 40,),
+                        Container(height: 20,),
                         // Text("Profile uid: " + FirebaseAuth.instance.currentUser.uid),
                         Row(
                           children: [
