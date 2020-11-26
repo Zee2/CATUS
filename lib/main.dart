@@ -123,7 +123,14 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Quick Team Formation"),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(100.0),
+                    elevation: 6.0,
+                    child: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text("Quick Team Formation")
+                    )
+                  ),
                 ),
                 FloatingActionButton(
                   onPressed: () {
@@ -148,7 +155,14 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Create Survey"),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(100.0),
+                    elevation: 6.0,
+                    child: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text("Create Survey")
+                    )
+                  ),
                 ),
                 FloatingActionButton(
                   onPressed: () {
