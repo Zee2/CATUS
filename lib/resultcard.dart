@@ -180,6 +180,7 @@ class ResultGrid extends StatelessWidget {
     List<String> completed = survey['completed'].cast<String>();
 
     int myIndex = completed.indexOf(FirebaseAuth.instance.currentUser.uid);
+    int recipients = survey['recipients'].cast<String>().length;
 
     return Center(
       child: Container(
@@ -191,7 +192,7 @@ class ResultGrid extends StatelessWidget {
             ),
         padding: EdgeInsets.all(15.0),
         child: Column(
-          children: completed.length == survey['teamSize'] ? [
+          children: completed.length == recipients ? [
             Text("YOUR TEAM", style: Theme.of(context).textTheme.bodyText1.copyWith(
                   letterSpacing: 2.0,
                   color: Colors.black.withOpacity(0.5)
@@ -211,7 +212,7 @@ class ResultGrid extends StatelessWidget {
                 }
               )
             )
-          ] : [Text("Only " + completed.length.toString() + "/" + survey['teamSize'].toString() + " people have completed this survey. Results will be shown here after everyone completes the survey.")]
+          ] : [Text("Only " + completed.length.toString() + "/" + recipients.toString() + " people have completed this survey. Results will be shown here after everyone completes the survey.")]
         )
       )
       
