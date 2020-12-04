@@ -130,41 +130,10 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
                   child: Material(
                     borderRadius: BorderRadius.circular(100.0),
                     elevation: 6.0,
+                    color: Colors.white,
                     child: Container(
                       padding: EdgeInsets.all(10.0),
-                      child: Text("Quick Team Formation")
-                    )
-                  ),
-                ),
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => QuickTeamFormation()),
-                    );
-                  },
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.blue,
-                  mini: true,
-                  heroTag: null,
-                  child: Icon(Icons.edit),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0)
-                )
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Material(
-                    borderRadius: BorderRadius.circular(100.0),
-                    elevation: 6.0,
-                    child: Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text("Create Survey")
+                      child: Text("Create Survey-Based Team")
                     )
                   ),
                 ),
@@ -200,10 +169,44 @@ class _SwipeTabBarState extends State<SwipeTabBar> {
                   child: Icon(Icons.email),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(4.0)
+                  padding: const EdgeInsets.all(2.0)
                 )
               ],
-            )
+            ),
+            
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(100.0),
+                    elevation: 6.0,
+                    color: Colors.white,
+                    child: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text("Quick Random Team")
+                    )
+                  ),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => QuickTeamFormation()),
+                    );
+                  },
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.blue,
+                  mini: true,
+                  heroTag: null,
+                  child: Icon(Icons.edit),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(2.0)
+                )
+              ],
+            ),
         ]
       ) : null,
       bottomNavigationBar: BottomAppBar(
