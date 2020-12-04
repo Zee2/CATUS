@@ -267,7 +267,7 @@ class _SignUpState extends State<SignUp> {
                           }
                         ),
                         TextFormField(
-                          obscureText: false,
+                          obscureText: true,
                           decoration: InputDecoration(
                             labelText: "Password",
                           ),
@@ -281,7 +281,7 @@ class _SignUpState extends State<SignUp> {
                           }
                         ),
                         TextFormField(
-                          obscureText: false,
+                          obscureText: true,
                           
                           decoration: InputDecoration(
                             labelText: "Confirm password",
