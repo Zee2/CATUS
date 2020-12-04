@@ -397,6 +397,7 @@ Future<UserCredential> createUser(String email, String password, String name) as
       'draft': false,
       'groups': [],
       'questionCount': 3,
+      'teamSize': 1,
       'recipients': [
         result.user.uid
       ],

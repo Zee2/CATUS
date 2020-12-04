@@ -59,8 +59,8 @@ class _TakeSurveyState extends State<TakeSurvey> {
   }
 
   void processEdit(String questionID, String answer){
-    answers[questionID] = answer;
-    answersDirty = true;
+    // answers[questionID] = answer;
+    // answersDirty = true;
   }
 
   @override
@@ -85,7 +85,29 @@ class _TakeSurveyState extends State<TakeSurvey> {
                 key: _formKey,
                 child: Container(
                   child: Column(
-                    children: List<Widget>.generate(snapshot.data.docs.length, (index) {
+                    children: (widget.survey.data()['draft'] as bool == true ? <Widget>[
+                      Row(
+                        children: [
+                          Text(
+                            "Team size:   "
+                          ),
+                          DropdownButton<int>(
+                            value: widget.survey.data()['teamSize'],
+                            items: [
+                              DropdownMenuItem(child: Text("1"), value: 1),
+                              DropdownMenuItem(child: Text("2"), value: 2),
+                              DropdownMenuItem(child: Text("3"), value: 3),
+                              DropdownMenuItem(child: Text("4"), value: 4),
+                              DropdownMenuItem(child: Text("5"), value: 5)
+                            ],
+                            onChanged: (value) => setState(() {
+                              widget.survey.reference.update({"teamSize": value});
+                            }),
+                          )
+                        ],
+                      )
+                      
+                    ] : <Widget>[]) + List<Widget>.generate(snapshot.data.docs.length, (index) {
                       var question = snapshot.data.docs[index];
                       if (widget.survey.data()['draft']) {
                         return SurveyQuestion(question: question, updateCallback: processEdit, draft: true);
