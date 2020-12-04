@@ -20,7 +20,9 @@ class _QuickTeamFormationState extends State<QuickTeamFormation> {
   void addMemberToList() {
     setState(() {
       if (nameController.text != '') {
-        names.add(nameController.text);
+        List<String> listOfNames = nameController.text.split(",");
+        listOfNames.map((s) => s.trim());
+        names.addAll(listOfNames);
         nameController.clear();
       }
     });
@@ -89,24 +91,26 @@ class _QuickTeamFormationState extends State<QuickTeamFormation> {
                         return null;
                     }
                   ),
-                  
-                  TextFormField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Member Name',
-                    ),
-                  ),
                   Container(height: 15.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Add Member Name',
+                          ),
+                        ),
+                      ),
+                      Container(width: 20.0),
                       FloatingActionButton.extended(
-                      onPressed: () => addMemberToList(),
-                      heroTag: null,
-                      backgroundColor: Colors.blueAccent,
-                      label: Text("ADD MEMBER"),
-                      icon: Icon(Icons.add)
-                    )
+                        onPressed: () => addMemberToList(),
+                        heroTag: null,
+                        backgroundColor: Colors.blueAccent,
+                        label: Text("ADD"),
+                        icon: Icon(Icons.add)
+                      )
                     ],
                   )
                   
@@ -114,33 +118,35 @@ class _QuickTeamFormationState extends State<QuickTeamFormation> {
               ),
             )
           ),
-          Expanded(
-            child: Container(
-              alignment: Alignment.topLeft,
-              decoration: BoxDecoration(  
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                boxShadow: [BoxShadow(color:Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 20, offset: Offset(0,3))]
-              ),
-              padding: EdgeInsets.all(20.0),
-              margin: EdgeInsets.all(20.0).copyWith(bottom: 100.0),
-              child: GridView.builder(
-                padding: EdgeInsets.zero,
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  shrinkWrap: false,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount:  3,
-                    childAspectRatio: 1.0,
-                    crossAxisSpacing: 0.0,
-                    mainAxisSpacing: 0,
-                  ),
-                  itemCount: names.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return PersonBubble(name: names[index]);
-                  }
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+                  child: Wrap(
+                        spacing: 5.0,
+                        runSpacing: 5.0,
+                        runAlignment: WrapAlignment.start,
+                        alignment: WrapAlignment.center,
+                        children: List.generate(names.length, (index) {
+                          return Chip(
+                            elevation: 12.0,
+                            shadowColor: Colors.black.withOpacity(0.5),
+                            backgroundColor: Colors.white,
+                            avatar: Icon(Icons.person
+                            ),
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            label: Text(names[index])
+                          );
+                        })
+                      )
                 )
-            )
+              )
+              
+            ],
           )
+          
+          
         ]
       )
     );
