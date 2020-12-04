@@ -178,6 +178,7 @@ class ResultGrid extends StatelessWidget {
   Widget build(BuildContext context) {
 
     List<String> completed = survey['completed'].cast<String>();
+    completed.sort();
 
     int myIndex = completed.indexOf(FirebaseAuth.instance.currentUser.uid);
     int recipients = survey['recipients'].cast<String>().length;
