@@ -202,8 +202,11 @@ Future<void> sendSurvey(DocumentSnapshot survey) async {
       var groupDoc = await FirebaseFirestore.instance.collection('groups').where('name', isEqualTo: groupName).get();
       uids.addAll(groupDoc.docs[0].data()['users'].cast<String>());
     }
+    print("Added uids: " + uids.toString());
 
-    return survey.reference.set({'recipients': uids}, SetOptions(merge:true));
+    List<String> uidsArray = uids.toList();
+
+    return survey.reference.set({'recipients': uidsArray}, SetOptions(merge:true));
   }
 }
 
