@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:catus/header.dart';
+import 'package:catus/signin.dart';
+import 'package:catus/newGroupModal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -18,13 +20,13 @@ class GroupsEditor extends StatefulWidget {
 class _GroupsEditorState extends State<GroupsEditor>{
 
   Stream<DocumentSnapshot> documentStream;
-  Future<QuerySnapshot> groupsQuery;
+  Stream<QuerySnapshot> groupsQuery;
 
   @override
   void initState() {
     super.initState();
     documentStream = widget.doc.reference.snapshots();
-    groupsQuery = FirebaseFirestore.instance.collection('groups').get();
+    groupsQuery = FirebaseFirestore.instance.collection('groups').snapshots();
   }
 
   @override
@@ -37,8 +39,8 @@ class _GroupsEditorState extends State<GroupsEditor>{
     //           padding: EdgeInsets.only(right: 5), child: GroupTag(tags[index]));
     //     }));
     // }
-    return FutureBuilder(
-      future: groupsQuery,
+    return StreamBuilder(
+      stream: groupsQuery,
       builder: (context, AsyncSnapshot<QuerySnapshot> groups) {
         if(!groups.hasData){
           return Container();
@@ -76,15 +78,15 @@ class _GroupsEditorState extends State<GroupsEditor>{
                   )
                 );
               } else {
-                return Wrap(
-                  spacing: 5,
-                  runSpacing: 5,
-                  children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
-                    
-                    return Theme(
-                      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-                      child: FilterChip(
+                return Theme(
+                  data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                  child: Wrap(
+                    spacing: 5,
+                    runSpacing: 5,
+                    children: List<Widget>.generate(groups.data.docs.length, (groupIndex) {
+                      return FilterChip(
                         selectedColor: Colors.white,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         backgroundColor: Colors.black.withOpacity(0.3),
                         labelStyle: DefaultTextStyle.of(context).style.copyWith(color: MaterialStateColor.resolveWith((states) {
                           return states.contains(MaterialState.selected) ? Colors.black : Colors.white;
@@ -98,10 +100,28 @@ class _GroupsEditorState extends State<GroupsEditor>{
                             value.data.reference.update({'groups': FieldValue.arrayRemove([groups.data.docs[groupIndex].data()['name']])});
                           }
                         }
-                      )
-                    );
-                  })
+                      );
+                  }) + [
+                    ActionChip(
+                      // backgroundColor: Colors.greenAccent,
+                      label: Text("New Group"),
+                      avatar: Icon(Icons.add, color: Colors.white,),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      backgroundColor: Colors.black.withOpacity(0.3),
+                      labelStyle: DefaultTextStyle.of(context).style.copyWith(color: Colors.white),
+                      onPressed: () => Navigator.push(context, createPopup(NewGroupModal(
+                        callbackSet: (name) {
+                          print("Creating group named " + name);
+                          FirebaseFirestore.instance.collection('groups').add({'name': name, 'users': []}).then((groupCollection) {
+                            value.data.reference.update({'groups': FieldValue.arrayUnion([name])});
+                          });
+                        }
+                      )))
+                    )
+                  ]
+                  )
                 );
+            
               }
               
             }

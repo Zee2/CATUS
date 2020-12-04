@@ -207,7 +207,7 @@ class _ProfilePageState extends State<ProfilePage>{
                                 children: List<Widget>.generate(value.data.docs.length, (index) {
                                   return FilterChip(
                                     selectedColor: Colors.lightBlueAccent,
-                                    
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     selected: (value.data.docs[index].data()['users'].cast<String>()).contains(FirebaseAuth.instance.currentUser.uid),
                                     label: Text(value.data.docs[index].data()['name']),
                                     onSelected: (selected) {
@@ -223,6 +223,7 @@ class _ProfilePageState extends State<ProfilePage>{
                                     backgroundColor: Colors.greenAccent,
                                     label: Text("New Group"),
                                     avatar: Icon(Icons.add),
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     onPressed: () => Navigator.push(context, createPopup(NewGroupModal(
                                       callbackSet: (name) {
                                         groupsCollection.add({'name': name, 'users': []});
