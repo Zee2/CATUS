@@ -32,11 +32,6 @@ class _SurveyListState extends State<SurveyList>{
   void initState(){
     super.initState();
 
-    if(widget.resultMode) {
-      assert(widget.onlyOurs);
-      assert(!widget.authorMode);
-    }
-
     if(widget.onlyOurs) {
       var user = FirebaseAuth.instance.currentUser;
       surveys = FirebaseFirestore.instance.collection("surveys").where('recipients', arrayContains: user.uid).snapshots();

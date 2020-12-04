@@ -17,8 +17,8 @@ class Results extends StatelessWidget {
     builder: (context, snapshot) {
       if(snapshot.data != null && snapshot.data.isAnonymous == false){
         User user = snapshot.data;
-        return SurveyList(title: "Results", onlyOurs: true, resultMode: true, filter: (DocumentSnapshot doc) {
-            return doc.data()['completed'].contains(user.uid);
+        return SurveyList(title: "Results", onlyOurs: false, resultMode: true, filter: (DocumentSnapshot doc) {
+            return doc.data()['completed'].contains(user.uid) || doc.data()['author'] == user.uid;
           });
       } else {
         return Stack(
